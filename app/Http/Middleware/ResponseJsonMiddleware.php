@@ -17,6 +17,8 @@ class ResponseJsonMiddleware
         /** @var Response $controllerResponse */
         $controllerResponse = $next($req);
         $data = $controllerResponse->original;
+        if (!in_array($controllerResponse->status(), [200, 201]))
+            return $controllerResponse;
         if ($controllerResponse instanceof JsonResponse) {
             if (is_array($data) || $data instanceof Collection || $data instanceof Model) {
                 $is_multi = false;

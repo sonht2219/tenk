@@ -19,5 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'json'], function () {
-   require_once 'admin.php';
+   require_once __DIR__ . '/admin.php';
 });

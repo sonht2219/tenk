@@ -9,7 +9,7 @@
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
-require_once 'restful.php';
+require_once __DIR__ . '/restful.php';
 //require_once 'constant.php';
 
 if (!function_exists('is_sequential_array')) {
@@ -92,3 +92,45 @@ if (!function_exists("str_slug")) {
     }
 }
 
+if (!function_exists('generate_db_comment')) {
+    /**
+     * @param \BenSampo\Enum\Enum[] $enums
+     * @return string
+     */
+    function generate_db_comment($enums) {
+        $comment = '';
+        foreach ($enums as $enum)
+            $comment .= $enum->value . ': ' . $enum->description . '. ';
+        return $comment;
+    }
+}
+
+if (!function_exists('lib_assets')) {
+    function lib_assets($path) {
+        return asset('libs/' . $path);
+    }
+}
+
+if (!function_exists('web_assets')) {
+    function web_assets($path) {
+        return asset('web/' . $path);
+    }
+}
+
+if (!function_exists('bind_query')) {
+    function bind_query($key, $value) {
+        $query = request()->query();
+        $query[$key] = $value;
+        return $query;
+    }
+}
+
+if (!function_exists('paginate_view')) {
+    /**
+     * @param LengthAwarePaginator $paginator
+     * @return mixed
+     */
+    function paginate_view($paginator) {
+        return $paginator->links();
+    }
+}
