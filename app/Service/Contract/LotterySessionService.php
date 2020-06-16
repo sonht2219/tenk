@@ -4,7 +4,6 @@
 namespace App\Service\Contract;
 
 
-use App\Enum\Status\LotterySessionStatus;
 use App\Models\LotterySession;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
