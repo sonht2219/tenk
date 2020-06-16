@@ -20,11 +20,13 @@ class LotterySessionServiceImpl implements LotterySessionService
 {
     private LotterySessionRepository $lotterySessionRepo;
     private ProductRepository $productRepo;
+    private LotteryRepository $lotteryRepo;
 
-    public function __construct(LotterySessionRepository $lotterySessionRepo, ProductRepository $productRepo)
+    public function __construct(LotterySessionRepository $lotterySessionRepo, ProductRepository $productRepo, LotteryRepository $lotteryRepo)
     {
         $this->lotterySessionRepo = $lotterySessionRepo;
         $this->productRepo = $productRepo;
+        $this->lotteryRepo = $lotteryRepo;
     }
 
     public function create(Product $product)
@@ -43,5 +45,10 @@ class LotterySessionServiceImpl implements LotterySessionService
     {
         $this->lotterySessionRepo->pushCriteria(LotterySessionWithProductCriteria::class);
         return $this->lotterySessionRepo->find($id);
+    }
+
+    public function historyLotterySession($session_id, $limit): LengthAwarePaginator
+    {
+        return $this->lotteryRepo->historyLotterySession($session_id, $limit);
     }
 }

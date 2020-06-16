@@ -13,6 +13,7 @@ use App\Models\LotterySession;
 use App\Models\Product;
 use App\Service\Contract\DtoBuilderService;
 use App\User;
+use Carbon\Carbon;
 
 class DtoBuilderServiceImpl implements DtoBuilderService
 {
@@ -88,6 +89,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'serial' => $lottery->serial,
             'user_id' => $lottery->user_id,
             'user' => null,
+            'joined_at' => $lottery->joined_at,
             'status' => $lottery->status,
             'status_title' => LotteryStatus::getDescription($lottery->status),
             'created_at' => $lottery->created_at->format(Constant::GLOBAL_TIME_FORMAT),
@@ -100,5 +102,17 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             $result['user'] = $lottery->user;
 
         return $result;
+    }
+
+    public function buildHistoryLotteryDto($history)
+    {
+        return [
+            'id' => $history->user_id,
+            'user_id' => $history->user_id,
+            'session_id' => $history->session_id,
+            'user' => $this->buildUserDto($history->user),
+            'joined_at' => $history->joined_at ? Carbon::createFromTimestampMs($history->joined_at)->format(Constant::FULL_TIME_FORMAT) : null,
+            'join_number' => $history->join_number
+        ];
     }
 }

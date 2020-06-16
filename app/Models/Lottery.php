@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery whereUserId($value)
  * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $joined_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery whereJoinedAt($value)
  */
 class Lottery extends Model
 {

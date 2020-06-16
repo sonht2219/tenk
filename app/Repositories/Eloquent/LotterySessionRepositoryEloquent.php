@@ -32,7 +32,15 @@ class LotterySessionRepositoryEloquent extends RepositoryEloquent implements Lot
      */
     public function boot()
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+//        $this->pushCriteria(app(RequestCriteria::class));
+    }
+
+    public function findByIdWithRelations($id, $relations)
+    {
+        return $this->model->newQuery()
+            ->where('id', $id)
+            ->with($relations)
+            ->first();
     }
 
 }

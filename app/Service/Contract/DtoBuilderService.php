@@ -15,4 +15,5 @@ interface DtoBuilderService
     public function buildProductDto(Product $product);
     public function buildLotterySessionDto(LotterySession $lottery_session);
     public function buildLotteryDto(Lottery $lottery);
+    public function buildHistoryLotteryDto($history);
 }

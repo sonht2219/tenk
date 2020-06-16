@@ -36,6 +36,7 @@ trait CanUseWallet
         $log->reason = ($cash > 0 ? 'Cộng' : 'Trừ') . ' ' . abs($cash) . ' xu từ tài khoản. Lý do: ' . $reason;
         $log->ref_table = $ref_table;
         $log->ref_index = $ref_index;
+        $log->user()->associate($user);
 
         return $this->logRepo->save($log);
     }
@@ -43,7 +44,7 @@ trait CanUseWallet
     protected function initialize()
     {
         if (!$this->is_initialize) {
-            $this->walletRepo = app(WalletLogRepository::class);
+            $this->walletRepo = app(WalletRepository::class);
             $this->logRepo = app(WalletLogRepository::class);
             $this->is_initialize = true;
         }
@@ -53,12 +54,14 @@ trait CanUseWallet
     {
         $wallet = new Wallet();
         $wallet->user()->associate($user);
+        $wallet->cash = 1000;
         return $this->walletRepo->save($wallet);
     }
 
     protected function updateWalletCash(Wallet $wallet, $cash): WalletLog
     {
         $log = new WalletLog();
+        $log->wallet()->associate($wallet);
         $log->old_cash = $wallet->cash;
 
         $new_cash = $wallet->cash + $cash;
@@ -68,6 +71,7 @@ trait CanUseWallet
         }
         $log->new_cash = $new_cash;
         $wallet->cash = $new_cash;
+        $log->cash_changed = $cash;
 
         $this->walletRepo->save($wallet);
 

@@ -23,4 +23,13 @@ class LotterySessionController extends Controller
     public function single($id) {
         return $this->dtoBuilder->buildLotterySessionDto($this->lotterySessionService->single($id));
     }
+
+    public function historyLotterySession($id, Request $req) {
+        $limit = $req->get('limit') ?: 10;
+        $histories = $this->lotterySessionService->historyLotterySession($id, $limit);
+        return [
+            'datas' => collect($histories->items())->map(fn($history) => $this->dtoBuilder->buildHistoryLotteryDto($history)),
+            'meta' => get_meta($histories)
+        ];
+    }
 }

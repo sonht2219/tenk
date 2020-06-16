@@ -4,6 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Enum\Status\CommonStatus;
 use App\Repositories\Common\RepositoryEloquent;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\Contract\LotteryRepository;
@@ -51,5 +53,22 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
         $this->model->newQuery()
             ->whereIn('id', $ids)
             ->update($attributes);
+    }
+
+    public function historyLotterySession($session_id, $limit): LengthAwarePaginator
+    {
+        return $this->model->newQuery()
+            ->where('session_id', $session_id)
+            ->whereNotNull('user_id')
+            ->groupBy('user_id')
+            ->select([
+                'user_id',
+                DB::raw('max(joined_at) as joined_at'),
+                DB::raw('count(*) as join_number'),
+                DB::raw('max(session_id) as session_id')
+            ])
+            ->orderBy('created_at', 'desc')
+            ->with(['user'])
+            ->paginate($limit);
     }
 }

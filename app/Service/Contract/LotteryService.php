@@ -13,4 +13,5 @@ interface LotteryService
     public function syncLotteryForSession(LotterySession $session);
     public function listLotteries($id, $search, $limit): LengthAwarePaginator;
     public function buyLotteries($session_id, $lottery_ids);
+    public function allLotteriesOfUserInLotterySession($session_id, $user_id);
 }

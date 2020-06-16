@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AllLotteryByUserAndSessionRequest;
 use App\Http\Requests\BuyLotteryRequest;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\LotteryService;
@@ -39,5 +40,15 @@ class LotteryController extends Controller
         $lottery_ids = $req->get('lottery_ids');
 
         return $this->lotteryService->buyLotteries($session_id, $lottery_ids);
+    }
+
+    public function allLotteriesOfUserInSession(AllLotteryByUserAndSessionRequest $req) {
+        $session_id = $req->get('session_id');
+        $user_id = $req->get('user_id');
+        return $this->lotteryService->allLotteriesOfUserInLotterySession($session_id, $user_id);
+    }
+
+    public function test() {
+        return $this->lotteryService->historyLotterySession(1000000, 10);
     }
 }

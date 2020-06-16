@@ -23,6 +23,7 @@ class CreateLotteriesTable extends Migration
             $table->integer('session_id')->index();
             $table->bigInteger('serial');
             $table->string('user_id')->nullable()->index();
+            $table->bigInteger('joined_at')->nullable();
 
             $table->timestamps();
 
