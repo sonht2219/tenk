@@ -12,4 +12,5 @@ use App\Repositories\Common\Repository;
 interface LotteryRepository extends Repository
 {
     public function removeRedundantLottery($product_id, $maxSerial);
+    public function updateLotteries($ids, $attributes);
 }

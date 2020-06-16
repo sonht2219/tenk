@@ -20,13 +20,11 @@ class LotterySessionServiceImpl implements LotterySessionService
 {
     private LotterySessionRepository $lotterySessionRepo;
     private ProductRepository $productRepo;
-    private LotteryRepository $lotteryRepo;
 
-    public function __construct(LotterySessionRepository $lotterySessionRepo, ProductRepository $productRepo, LotteryRepository $lotteryRepo)
+    public function __construct(LotterySessionRepository $lotterySessionRepo, ProductRepository $productRepo)
     {
         $this->lotterySessionRepo = $lotterySessionRepo;
         $this->productRepo = $productRepo;
-        $this->lotteryRepo = $lotteryRepo;
     }
 
     public function create(Product $product)

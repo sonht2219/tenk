@@ -45,4 +45,11 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
             ->where('status', CommonStatus::ACTIVE)
             ->update(['status' => CommonStatus::INACTIVE]);
     }
+
+    public function updateLotteries($ids, $attributes)
+    {
+        $this->model->newQuery()
+            ->whereIn('id', $ids)
+            ->update($attributes);
+    }
 }

@@ -17,7 +17,7 @@ class BuyLotteryRequest extends ValidatedRequest
         return [
             'session_id' => ['required', 'numeric', 'exists:lottery_sessions,id'],
             'lottery_ids' => ['required', 'array'],
-            'lottery_ids.*' => ['required', 'numeric', 'exists:lotteries:id']
+            'lottery_ids.*' => ['required', 'numeric', 'exists:lotteries,id']
         ];
     }
 }
