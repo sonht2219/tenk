@@ -10,7 +10,7 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Repositories\Contract\UserRepository;
 use App\Service\Contract\AuthService;
-use App\Services\Traits\GenerateIdUserTrait;
+use App\Service\Traits\GenerateIdUserTrait;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;

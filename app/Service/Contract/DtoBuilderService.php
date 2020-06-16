@@ -4,13 +4,11 @@
 namespace App\Service\Contract;
 
 
+use App\Models\Product;
 use App\User;
 
 interface DtoBuilderService
 {
-    /**
-     * @param User $user
-     * @return mixed
-     */
     public function buildUserDto(User $user);
+    public function buildProductDto(Product $product);
 }

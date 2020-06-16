@@ -68,7 +68,11 @@ abstract class RepositoryEloquent extends BaseRepository implements Repository
      */
     public function save($object)
     {
+        $isCreate = !$object->getKey();
         $object->save();
+        if ($isCreate) {
+            $object->refresh();
+        }
         return $object;
     }
 }

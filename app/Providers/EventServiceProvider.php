@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Queue\Events\LotterySessionSaved;
+use App\Queue\Events\ProductSaved;
+use App\Queue\Listeners\StartSessionForProduct;
+use App\Queue\Listeners\PrepareLotteryForSession;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ProductSaved::class => [
+            StartSessionForProduct::class
+        ],
+        LotterySessionSaved::class => [
+            PrepareLotteryForSession::class,
+        ]
     ];
 
     /**
