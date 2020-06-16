@@ -1,6 +1,8 @@
 <?php
 
 use App\Enum\Status\CommonStatus;
+use App\Enum\Status\LotterySessionStatus;
+use App\Enum\Status\LotteryStatus;
 
 
 /**
@@ -43,6 +45,17 @@ return [
         CommonStatus::ACTIVE => 'Hoạt động',
         CommonStatus::INACTIVE => 'Không hoạt động'
     ],
+    LotteryStatus::class => [
+        LotteryStatus::WAITING => 'Chưa bán',
+        LotteryStatus::SOLD => 'Đã bán',
+        LotteryStatus::DISABLED => 'Không hoạt động'
+    ],
+    LotterySessionStatus::class => [
+        LotterySessionStatus::SELLING => 'Đang bán',
+        LotterySessionStatus::COUNT_DOWNING => 'Đang đếm ngược',
+        LotterySessionStatus::ENDING => 'Kết thúc',
+        LotterySessionStatus::DELETED => 'Đã xóa'
+    ]
 //    CommentTargetType::class => [
 //        CommentTargetType::PRODUCT => 'Sản phẩm'
 //    ],
