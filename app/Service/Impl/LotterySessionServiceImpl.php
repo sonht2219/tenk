@@ -46,19 +46,4 @@ class LotterySessionServiceImpl implements LotterySessionService
         $this->lotterySessionRepo->pushCriteria(LotterySessionWithProductCriteria::class);
         return $this->lotterySessionRepo->find($id);
     }
-
-    public function listLotteries($id, $search, $limit = 10): LengthAwarePaginator
-    {
-        $this->lotteryRepo->pushCriteria(new HasLotterySessionIdCriteria($id));
-
-        if ($search)
-            $this->lotteryRepo->pushCriteria(new LotterySearchCriteria($search));
-
-        return $this->lotteryRepo->paginate($limit);
-    }
-
-    public function buyLotteries($session_id, $lottery_ids)
-    {
-        
-    }
 }

@@ -12,6 +12,4 @@ interface LotterySessionService
 {
     public function create(Product $product);
     public function single($id): LotterySession;
-    public function listLotteries($id, $search, $limit): LengthAwarePaginator;
-    public function buyLotteries($session_id, $lottery_ids);
 }
