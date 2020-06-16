@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Enum\Status\LotterySessionStatus;
 use App\Http\Controllers\AuthorizedController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BuyLotteryRequest;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\LotterySessionService;
 use Illuminate\Http\Request;
@@ -41,5 +42,26 @@ class LotterySessionController extends Controller
             'datas' => collect($sessions_page->items())->map(fn($item) => $this->dtoBuilder->buildLotterySessionDto($item)),
             'meta' => get_meta($sessions_page)
         ];
+    }
+    public function single($id) {
+        return $this->dtoBuilder->buildLotterySessionDto($this->lotterySessionService->single($id));
+    }
+
+    public function listLotteries($id, Request $req) {
+        $search = $req->get('search');
+        $limit = $req->get('limit') ?: 10;
+
+        $lotteries = $this->lotterySessionService->listLotteries($id, $search, $limit);
+
+        return [
+            'datas' => collect($lotteries->items())->map(function ($lottery) {
+                return $this->dtoBuilder->buildLotteryDto($lottery);
+            }),
+            'meta' => get_meta($lotteries)
+        ];
+    }
+
+    public function buyLottery(BuyLotteryRequest $req) {
+
     }
 }

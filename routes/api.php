@@ -22,6 +22,10 @@ Route::group(['prefix' => 'admin', 'middleware'], function () {
    require_once __DIR__ . '/admin.php';
 });
 
+Route::group(['prefix' => 'v1'], function () {
+    require_once __DIR__ . '/v1.php';
+});
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'Auth\ApiAuthController@login');
     Route::post('register', 'Auth\ApiAuthController@register');
