@@ -8,4 +8,6 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('{id}', 'Admin\ProductController@single');
         Route::put('{id}', 'Admin\ProductController@edit');
     });
+
+    Route::post('storage', 'Admin\StorageController@saveImage');
 });

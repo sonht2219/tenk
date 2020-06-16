@@ -43,7 +43,7 @@ if (!function_exists("restful_error")) {
         }
 
         if ($trace) {
-            $res['trace'] = $trace;
+            $res['trace'] = json_encode($trace);
         }
         return response()->json($res, $status);
     }
