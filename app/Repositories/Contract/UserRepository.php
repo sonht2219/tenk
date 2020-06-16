@@ -16,4 +16,8 @@ interface UserRepository extends Repository
      * @throws ModelNotFoundException
      */
     public function findByEmailOrFails(string $email): User;
+
+    public function findByPhoneNumberOrFails(string $phone_number): User;
+
+    public function existPhoneNumber($phone_number): bool;
 }

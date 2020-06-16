@@ -134,3 +134,12 @@ if (!function_exists('paginate_view')) {
         return $paginator->links();
     }
 }
+
+if (!function_exists('phone_to_valid')) {
+    function phone_to_valid($phone_number) {
+        $phone_number = str_replace(' ', '', $phone_number);
+        $phone_number = str_replace('+', '', $phone_number);
+        $phone_number = preg_replace('/^84/', '0', $phone_number);
+        return $phone_number;
+    }
+}

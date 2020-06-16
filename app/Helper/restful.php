@@ -50,7 +50,7 @@ if (!function_exists("restful_error")) {
 }
 
 if (!function_exists("restful_exception")) {
-    function restful_exception(Exception $exception)
+    function restful_exception(Throwable $exception)
     {
 //        return response()->json($exception->getTrace());
         if ($exception instanceof AuthenticationException) {

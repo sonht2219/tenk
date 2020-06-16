@@ -13,7 +13,9 @@ use App\Service\Contract\AuthService;
 use App\Services\Traits\GenerateIdUserTrait;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Tymon\JWTAuth\JWT;
+use Illuminate\Support\Facades\Hash;
 
 class AuthServiceImpl implements AuthService
 {
@@ -35,11 +37,17 @@ class AuthServiceImpl implements AuthService
      */
     public function register(RegisterRequest $req)
     {
-        $data = $req->filteredData();
-        $data['password'] = Hash::make($req->password);
-        $data['birthday'] = $req->birthday ? Carbon::createFromTimestampMs($req->birthday) : null;
-        $data['id'] = $this->generateId();
-        return $this->userRepo->create($data);
+        try {
+            $data = $req->filteredData();
+            $data['password'] = Hash::make($req->password);
+            $data['id'] = $this->generateId();
+
+            $user = $this->userRepo->create($data);
+            event(new Registered($user));
+            return $user;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -47,7 +55,7 @@ class AuthServiceImpl implements AuthService
      */
     public function login(AuthRequest $req)
     {
-        $user = $this->userRepo->findByEmailOrFails($req->email);
+        $user = $this->userRepo->findByPhoneNumberOrFails($req->phone_number);
         if (!Hash::check($req->password, $user->password))
             throw new ExecuteException(__('messages.password_not_match'));
         if ($user->status != CommonStatus::ACTIVE)

@@ -21,3 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'admin', 'middleware' => 'json'], function () {
    require_once __DIR__ . '/admin.php';
 });
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', 'Auth\ApiAuthController@login');
+    Route::post('register', 'Auth\ApiAuthController@register');
+    Route::get('user-data', 'Auth\ApiAuthController@userData');
+});
