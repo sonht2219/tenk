@@ -70,11 +70,12 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'status' => $lottery_session->status,
             'status_title' => LotterySessionStatus::getDescription($lottery_session->status),
             'created_at' => $lottery_session->created_at->format(Constant::GLOBAL_TIME_FORMAT),
-            'updated_at' => $lottery_session->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
+            'updated_at' => $lottery_session->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'remain_time_mls' => $lottery_session->time_end ? ($lottery_session->time_end - round(microtime(true) * 1000)) : null
         ];
 
-        if ($lottery_session->relationLoaded('product'))
-            $result['product'] = $lottery_session->product;
+        if ($lottery_session->relationLoaded('product') && $lottery_session->product)
+            $result['product'] = $this->buildProductDto($lottery_session->product);
 
         return $result;
     }
@@ -94,10 +95,10 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'updated_at' => $lottery->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
         ];
 
-        if ($lottery->relationLoaded('session'))
-            $result['session'] = $lottery->session;
-        if ($lottery->relationLoaded('user'))
-            $result['user'] = $lottery->user;
+        if ($lottery->relationLoaded('session') && $lottery->session)
+            $result['session'] = $this->buildLotterySessionDto($lottery->session);
+        if ($lottery->relationLoaded('user') && $lottery->user)
+            $result['user'] = $this->buildUserDto($lottery->user);
 
         return $result;
     }
