@@ -1,8 +1,7 @@
 <?php
 
 
-namespace App\Services\Traits;
-
+namespace App\Service\Traits;
 
 use App\Repositories\Contract\UserRepository;
 use Illuminate\Support\Str;
