@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Wallet;
 use App\Notifications\CustomVerifyEmailQueued;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,6 +42,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereSocialId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
+ * @property-read \App\Models\Wallet|null $wallet
  */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
@@ -93,5 +95,9 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmailQueued);
+    }
+
+    public function wallet() {
+        return $this->hasOne(Wallet::class);
     }
 }
