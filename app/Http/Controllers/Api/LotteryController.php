@@ -47,8 +47,4 @@ class LotteryController extends Controller
         $user_id = $req->get('user_id');
         return $this->lotteryService->allLotteriesOfUserInLotterySession($session_id, $user_id);
     }
-
-    public function test() {
-        return $this->lotteryService->historyLotterySession(1000000, 10);
-    }
 }
