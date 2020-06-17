@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Criteria\Common;
+namespace App\Repositories\Criteria\Feedback;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -8,17 +8,17 @@ use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Class WithRelationsCriteria.
+ * Class FeedBackOfProductCriteria.
  *
- * @package namespace App\Repositories\Criteria\Common;
+ * @package namespace App\Repositories\Criteria\Feedback;
  */
-class WithRelationsCriteria implements CriteriaInterface
+class FeedBackOfProductCriteria implements CriteriaInterface
 {
-    protected $relation;
+    private $product_id;
 
-    public function __construct($relation)
+    public function __construct($product_id)
     {
-        $this->relation = $relation;
+        $this->product_id = $product_id;
     }
 
     /**
@@ -31,6 +31,6 @@ class WithRelationsCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->with($this->relation);
+        return $model->where('product_id', $this->product_id);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\Status\RewardStatus;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -20,6 +21,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lottery[] $lotteries
  * @property-read int|null $lotteries_count
  * @property-read \App\Models\Product $product
+ * @property-read \App\Models\LotteryReward|null $reward
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotterySession newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotterySession newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotterySession query()
@@ -51,5 +53,10 @@ class LotterySession extends Model
 
     public function product() {
         return $this->belongsTo(Product::class);
+    }
+
+    public function reward() {
+        return $this->hasOne(LotteryReward::class, 'session_id')
+            ->where('status', '<>', RewardStatus::REJECTED);
     }
 }

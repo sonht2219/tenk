@@ -4,6 +4,7 @@
 namespace App\Service\Contract;
 
 
+use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotterySession;
 use App\Models\Product;
@@ -16,4 +17,5 @@ interface DtoBuilderService
     public function buildLotterySessionDto(LotterySession $lottery_session);
     public function buildLotteryDto(Lottery $lottery);
     public function buildHistoryLotteryDto($history);
+    public function buildFeedbackDto(Feedback $feedback);
 }

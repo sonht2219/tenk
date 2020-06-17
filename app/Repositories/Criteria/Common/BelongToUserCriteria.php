@@ -8,29 +8,29 @@ use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Class WithRelationsCriteria.
+ * Class BelongToUserCriteria.
  *
  * @package namespace App\Repositories\Criteria\Common;
  */
-class WithRelationsCriteria implements CriteriaInterface
+class BelongToUserCriteria implements CriteriaInterface
 {
-    protected $relation;
+    private $user_id;
 
-    public function __construct($relation)
+    public function __construct($user_id)
     {
-        $this->relation = $relation;
+        $this->user_id = $user_id;
     }
 
     /**
      * Apply criteria in query repository
      *
-     * @param Builder|Model              $model
+     * @param Model|Builder              $model
      * @param RepositoryInterface $repository
      *
      * @return mixed
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->with($this->relation);
+        return $model->where('user_id', $this->user_id);
     }
 }

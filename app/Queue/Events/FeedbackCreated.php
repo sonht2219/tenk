@@ -4,6 +4,7 @@
 namespace App\Queue\Events;
 
 
+use App\Models\Feedback;
 use App\Models\LotterySession;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,15 +12,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class LotterySessionSaved implements ShouldBroadcast
+class FeedbackCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public LotterySession $session;
+    public Feedback $feedback;
 
-    public function __construct(LotterySession $session)
+    public function __construct(Feedback $feedback)
     {
-        $this->session = $session;
+
+        $this->feedback = $feedback;
     }
 
     /**
