@@ -8,6 +8,7 @@ use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Helper\Constant;
+use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotterySession;
 use App\Models\Product;
@@ -123,5 +124,39 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'joined_at' => $history->joined_at ? Carbon::createFromTimestampMs($history->joined_at)->format(Constant::FULL_TIME_FORMAT) : null,
             'join_number' => $history->join_number
         ];
+    }
+
+    public function buildFeedbackDto(Feedback $feedback)
+    {
+        $result = [
+            'id' => $feedback->id,
+            'user_id' => $feedback->user_id,
+            'session_id' => $feedback->session_id,
+            'product_id' => $feedback->product_id,
+            'lottery_id' => $feedback->lottery_id,
+            'created_at' => $feedback->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $feedback->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'status' => $feedback->status,
+            'status_title' => CommonStatus::getDescription($feedback->status),
+            'images' => $feedback->images
+                ? collect(explode(',', $feedback->images))
+                    ->map(fn($img) => $this->fileService->uploaded_url($img))
+                : null
+        ];
+
+        if ($feedback->relationLoaded('user') && $feedback->user)
+            $result['user'] = $this->buildUserDto($feedback->user);
+
+        if ($feedback->relationLoaded('session') && $feedback->session)
+            $result['session'] = $this->buildLotterySessionDto($feedback->session);
+
+        if ($feedback->relationLoaded('product') && $feedback->product)
+            $result['product'] = $this->buildProductDto($feedback->product);
+
+        if ($feedback->relationLoaded('lottery') && $feedback->lottery)
+            $result['lottery'] = $this->buildLotteryDto($feedback->lottery);
+
+        return $result;
+
     }
 }
