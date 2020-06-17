@@ -5,12 +5,14 @@ namespace App\Providers;
 use App\Service\Contract\AuthService;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FileService;
+use App\Service\Contract\LotteryRewardService;
 use App\Service\Contract\LotteryService;
 use App\Service\Contract\LotterySessionService;
 use App\Service\Contract\ProductService;
 use App\Service\Impl\AuthServiceImpl;
 use App\Service\Impl\DtoBuilderServiceImpl;
 use App\Service\Impl\FileServiceImpl;
+use App\Service\Impl\LotteryRewardServiceImpl;
 use App\Service\Impl\LotteryServiceImpl;
 use App\Service\Impl\LotterySessionServiceImpl;
 use App\Service\Impl\ProductServiceImpl;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         LotteryService::class => LotteryServiceImpl::class,
         DtoBuilderService::class => DtoBuilderServiceImpl::class,
         LotterySessionService::class => LotterySessionServiceImpl::class,
+        LotteryRewardService::class => LotteryRewardServiceImpl::class,
 
         FileService::class => FileServiceImpl::class,
     ];

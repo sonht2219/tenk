@@ -10,6 +10,8 @@ use App\Exceptions\ExecuteException;
 use App\Models\Lottery;
 use App\Models\LotterySession;
 use App\Models\Product;
+use App\Queue\Events\LotterySessionStartCountDown;
+use App\Queue\Jobs\CalculateRewardForLotterySession;
 use App\Repositories\Contract\LotteryRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Criteria\Lottery\HasLotterySessionIdCriteria;
@@ -17,13 +19,15 @@ use App\Repositories\Criteria\Lottery\HasUserIdCriteria;
 use App\Repositories\Criteria\Lottery\LotterySearchCriteria;
 use App\Service\Contract\LotteryService;
 use App\Service\Traits\CanUseWallet;
+use App\Service\Traits\CreateSessionTrait;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
 class LotteryServiceImpl implements LotteryService
 {
-    use CanUseWallet;
+    use CanUseWallet, CreateSessionTrait;
     private LotteryRepository $lotteryRepo;
     private LotterySessionRepository $lotterySessionRepo;
 
@@ -72,7 +76,7 @@ class LotteryServiceImpl implements LotteryService
             throw new ExecuteException(__('Đợt tham gia này đã kết thúc bán phiếu'));
 
         $lotteries = $this->lotteryRepo->findWhereIn('id', $lottery_ids);
-        if (count($invalids = $this->findInvalidLotteries($lotteries)))
+        if (count($invalids = $this->findInvalidLotteries($lotteries, $lottery_session)))
             throw new ExecuteException(__('Phiếu ' . implode(', ', $invalids) . ' không hợp lệ. Vui lòng chọn phiếu khác'));
 
         $amount_lotteries = count($lotteries);
@@ -91,8 +95,13 @@ class LotteryServiceImpl implements LotteryService
 
         $lottery_session->update(['sold_quantity' => $sold_quantity]);
 
-        if ($sold_quantity == $lottery_session->product->price)
-            $this->openReward($lottery_session, $now);
+        if ($sold_quantity == $lottery_session->product->price) {
+            $this->countDownLotterySession($lottery_session, $now);
+            $this->createLotterySession($lottery_session->product);
+            dispatch(new CalculateRewardForLotterySession($lottery_session))
+                ->delay(Carbon::now()->addMilliseconds($this->getTimeCountDown()));
+            event(new LotterySessionStartCountDown($lottery_session));
+        }
 
         return ['data' => true];
     }
@@ -101,7 +110,7 @@ class LotteryServiceImpl implements LotteryService
      * @param LotterySession $lottery_session
      * @param $now
      */
-    public function openReward($lottery_session, $now) {
+    public function countDownLotterySession($lottery_session, $now) {
         $this->lotterySessionRepo->update(
             [
                 'time_end' => $now + $this->getTimeCountDown(),
@@ -109,17 +118,17 @@ class LotteryServiceImpl implements LotteryService
             ],
             $lottery_session->id
         );
-        // chạy job random trúng thưởng
     }
 
     /**
      * @param $lotteries
+     * @param LotterySession $session
      * @return int[]
      */
-    public function findInvalidLotteries($lotteries) {
+    public function findInvalidLotteries($lotteries, $session) {
         $invalid_lotteries = [];
         foreach ($lotteries as $lottery) {
-            if ($lottery->status != LotteryStatus::WAITING)
+            if ($lottery->status != LotteryStatus::WAITING || $lottery->session_id != $session->id)
                 $invalid_lotteries[] = $lottery->serial;
         }
         return $invalid_lotteries;

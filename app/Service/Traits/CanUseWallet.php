@@ -41,7 +41,7 @@ trait CanUseWallet
         return $this->logRepo->save($log);
     }
 
-    protected function initialize()
+    private function initialize()
     {
         if (!$this->is_initialize) {
             $this->walletRepo = app(WalletRepository::class);

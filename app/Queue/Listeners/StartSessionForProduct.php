@@ -25,7 +25,7 @@ class StartSessionForProduct implements ShouldQueue
         if ($event->will_start_session) {
             try {
                 DB::beginTransaction();
-                $this->lotterySessionService->create($event->product);
+                $this->lotterySessionService->createLotterySession($event->product);
                 DB::commit();
             } catch (Throwable $e) {
                 DB::rollBack();
