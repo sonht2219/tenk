@@ -7,9 +7,11 @@ namespace App\Service\Impl;
 use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
+use App\Enum\Status\RewardStatus;
 use App\Helper\Constant;
 use App\Models\Feedback;
 use App\Models\Lottery;
+use App\Models\LotteryReward;
 use App\Models\LotterySession;
 use App\Models\Product;
 use App\Service\Contract\DtoBuilderService;
@@ -79,6 +81,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'sold_quantity' => $lottery_session->sold_quantity,
             'status' => $lottery_session->status,
             'status_title' => LotterySessionStatus::getDescription($lottery_session->status),
+            'reward' => null,
             'created_at' => $lottery_session->created_at->format(Constant::GLOBAL_TIME_FORMAT),
             'updated_at' => $lottery_session->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
             'remain_time_mls' => $lottery_session->time_end ? ($lottery_session->time_end - round(microtime(true) * 1000)) : null
@@ -86,6 +89,8 @@ class DtoBuilderServiceImpl implements DtoBuilderService
 
         if ($lottery_session->relationLoaded('product') && $lottery_session->product)
             $result['product'] = $this->buildProductDto($lottery_session->product);
+        if ($lottery_session->relationLoaded('reward') && $lottery_session->reward)
+            $result['reward'] = $this->buildLotteryRewardDto($lottery_session->reward);
 
         return $result;
     }
@@ -124,6 +129,33 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'joined_at' => $history->joined_at ? Carbon::createFromTimestampMs($history->joined_at)->format(Constant::FULL_TIME_FORMAT) : null,
             'join_number' => $history->join_number
         ];
+    }
+
+    public function buildLotteryRewardDto(LotteryReward $lottery_reward)
+    {
+        $result = [
+            'id' => $lottery_reward->id,
+            'session_id' => $lottery_reward->session_id,
+            'session' => null,
+            'user_id' => $lottery_reward->user_id,
+            'user' => null,
+            'lottery_id' => $lottery_reward->lottery_id,
+            'lottery' => null,
+            'join_times' => $lottery_reward->join_times,
+            'status' => $lottery_reward->status,
+            'status_title' => RewardStatus::getDescription($lottery_reward->status),
+            'created_at' => $lottery_reward->created_at->format(Constant::FULL_TIME_FORMAT),
+            'updated_at' => $lottery_reward->updated_at->format(Constant::FULL_TIME_FORMAT)
+        ];
+
+        if ($lottery_reward->relationLoaded('session') && $lottery_reward->session)
+            $result['session'] = $this->buildLotterySessionDto($lottery_reward->session);
+        if ($lottery_reward->relationLoaded('user') && $lottery_reward->user)
+            $result['user'] = $this->buildUserDto($lottery_reward->user);
+        if ($lottery_reward->relationLoaded('lottery') && $lottery_reward->lottery)
+            $result['lottery'] = $this->buildLotteryDto($lottery_reward->lottery);
+
+        return $result;
     }
 
     public function buildFeedbackDto(Feedback $feedback)

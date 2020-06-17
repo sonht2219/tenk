@@ -12,4 +12,5 @@ use App\Repositories\Common\Repository;
 interface LotterySessionRepository extends Repository
 {
     public function findByIdWithRelations($id, $relations);
+    public function listSessionOpeningAndEnded($limit);
 }

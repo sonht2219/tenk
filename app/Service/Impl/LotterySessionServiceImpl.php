@@ -59,4 +59,9 @@ class LotterySessionServiceImpl implements LotterySessionService
         return $this->lotterySessionRepo->paginate($limit);
 
     }
+
+    public function listSessionOpeningAndEnded($limit): LengthAwarePaginator
+    {
+        return $this->lotterySessionRepo->listSessionOpeningAndEnded($limit);
+    }
 }

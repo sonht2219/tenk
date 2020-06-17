@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Enum\Status\LotterySessionStatus;
 use App\Repositories\Common\RepositoryEloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\Contract\LotterySessionRepository;
@@ -41,6 +43,21 @@ class LotterySessionRepositoryEloquent extends RepositoryEloquent implements Lot
             ->where('id', $id)
             ->with($relations)
             ->first();
+    }
+
+    public function listSessionOpeningAndEnded($limit)
+    {
+        return $this->model->newQuery()
+            ->leftJoin('lottery_rewards', 'lottery_sessions.id', 'lottery_rewards.session_id')
+            ->where(function (Builder $q) {
+                $q->where('lottery_sessions.status', LotterySessionStatus::COUNT_DOWNING)
+                    ->orWhere('lottery_sessions.status', LotterySessionStatus::ENDING);
+            })
+            ->orderBy('lottery_sessions.status')
+            ->orderBy('lottery_rewards.created_at', 'desc')
+            ->with(['product', 'reward.user', 'reward.lottery'])
+            ->select(['lottery_sessions.*'])
+            ->paginate($limit);
     }
 
 }
