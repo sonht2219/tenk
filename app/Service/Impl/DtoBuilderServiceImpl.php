@@ -12,11 +12,18 @@ use App\Models\Lottery;
 use App\Models\LotterySession;
 use App\Models\Product;
 use App\Service\Contract\DtoBuilderService;
+use App\Service\Contract\FileService;
 use App\User;
 use Carbon\Carbon;
 
 class DtoBuilderServiceImpl implements DtoBuilderService
 {
+    private FileService $fileService;
+
+    public function __construct(FileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
 
     public function buildProductDto(Product $product)
     {
@@ -26,7 +33,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'slug' => $product->slug,
             'description' => $product->description,
             'images' => $images,
-            'image_urls' => collect($images),
+            'image_urls' => collect($images)->map(fn($img) => $this->fileService->uploaded_url($img)),
             'status' => $product->status,
             'status_title' => CommonStatus::getDescription($product->status),
             'created_at' => $product->created_at->format(Constant::GLOBAL_TIME_FORMAT),
@@ -34,7 +41,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'price' => $product->price,
             'original_price' => $product->original_price,
             'thumbnail' => $product->thumbnail,
-            'thumbnail_url' => $product->thumbnail,
+            'thumbnail_url' => $this->fileService->uploaded_url($product->thumbnail),
             'creator_id' => $product->creator_id
         ];
 
@@ -54,6 +61,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'phone_number' => $user->phone_number,
             'name' => $user->name,
             'avatar' => $user->avatar,
+            'avatar_url' => $user->avatar ? $this->fileService->uploaded_url($user->avatar) : $user->avatar,
             'status' => $user->status,
             'created_at' => $user->created_at->format(Constant::GLOBAL_TIME_FORMAT),
             'updated_at' => $user->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
