@@ -5,15 +5,15 @@ namespace App\Repositories\Eloquent;
 use App\Repositories\Common\RepositoryEloquent;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\Contract\LotterySessionRepository;
-use App\Models\LotterySession;
+use App\Repositories\Contract\WalletLogRepository;
+use App\Models\WalletLog;
 
 /**
- * Class LotterySessionRepositoryEloquent.
+ * Class WalletLogRepositoryEloquent.
  *
  * @package namespace App\Repositories\Eloquent;
  */
-class LotterySessionRepositoryEloquent extends RepositoryEloquent implements LotterySessionRepository
+class WalletLogRepositoryEloquent extends RepositoryEloquent implements WalletLogRepository
 {
     /**
      * Specify Model class name
@@ -22,7 +22,7 @@ class LotterySessionRepositoryEloquent extends RepositoryEloquent implements Lot
      */
     public function model()
     {
-        return LotterySession::class;
+        return WalletLog::class;
     }
 
 
@@ -33,14 +33,6 @@ class LotterySessionRepositoryEloquent extends RepositoryEloquent implements Lot
     public function boot()
     {
 //        $this->pushCriteria(app(RequestCriteria::class));
-    }
-
-    public function findByIdWithRelations($id, $relations)
-    {
-        return $this->model->newQuery()
-            ->where('id', $id)
-            ->with($relations)
-            ->first();
     }
 
 }

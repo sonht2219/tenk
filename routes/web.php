@@ -22,4 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['prefix' => 'web-views'], function () {
+   Route::get('guide-join', function () {
+       return view('web-views.guide-join');
+   });
+});
 Route::get('/home', 'HomeController@index')->name('home');
