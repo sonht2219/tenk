@@ -18,7 +18,7 @@ class CreateLotteriesTable extends Migration
 	public function up()
 	{
 		Schema::create('lotteries', function(Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->integer('session_id')->index();
             $table->bigInteger('serial');

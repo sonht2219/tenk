@@ -18,10 +18,12 @@ use App\Repositories\Criteria\LotterySession\LotterySessionSearchCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionWithProductCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionWithRelationCriteria;
 use App\Service\Contract\LotterySessionService;
+use App\Service\Traits\CreateSessionTrait;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class LotterySessionServiceImpl implements LotterySessionService
 {
+    use CreateSessionTrait;
     private LotterySessionRepository $lotterySessionRepo;
     private ProductRepository $productRepo;
     private LotteryRepository $lotteryRepo;
@@ -31,18 +33,6 @@ class LotterySessionServiceImpl implements LotterySessionService
         $this->lotterySessionRepo = $lotterySessionRepo;
         $this->productRepo = $productRepo;
         $this->lotteryRepo = $lotteryRepo;
-    }
-
-    public function create(Product $product)
-    {
-        $session = new LotterySession();
-        $session->product()->associate($product);
-
-        $session = $this->lotterySessionRepo->save($session);
-
-        event(new LotterySessionSaved($session));
-
-        return $session;
     }
 
     public function single($id): LotterySession

@@ -71,4 +71,11 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
             ->with(['user'])
             ->paginate($limit);
     }
+
+    public function countJoinTimesOfUserInSession($user_id, $session_id): int
+    {
+        return $this->model->newQuery()
+            ->where(compact('user_id', 'session_id'))
+            ->count();
+    }
 }
