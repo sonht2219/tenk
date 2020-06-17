@@ -55,4 +55,13 @@ class LotterySessionController extends Controller
             'meta' => get_meta($histories)
         ];
     }
+
+    public function listSessionOpeningAndEnded(Request $req) {
+        $limit = $req->get('limit') ?: 10;
+        $sessions = $this->lotterySessionService->listSessionOpeningAndEnded($limit);
+        return [
+            'datas' => collect($sessions->items())->map(fn($session) => $this->dtoBuilder->buildLotterySessionDto($session)),
+            'meta' => get_meta($sessions)
+        ];
+    }
 }
