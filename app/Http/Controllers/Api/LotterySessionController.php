@@ -43,8 +43,14 @@ class LotterySessionController extends Controller
             'meta' => get_meta($sessions_page)
         ];
     }
-    public function single($id) {
+    public function single($id, Request $req) {
         return $this->dtoBuilder->buildLotterySessionDto($this->lotterySessionService->single($id));
+    }
+
+    public function singleByProductAndStatus(Request $req) {
+        $product_id = $req->get('product_id');
+        $status = $req->get('status') ?: LotterySessionStatus::SELLING;
+        return $this->dtoBuilder->buildLotterySessionDto($this->lotterySessionService->singleByProductAndStatus($product_id, $status));
     }
 
     public function historyLotterySession($id, Request $req) {

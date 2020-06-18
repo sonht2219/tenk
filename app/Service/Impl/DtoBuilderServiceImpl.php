@@ -43,6 +43,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'updated_at' => $product->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
             'price' => $product->price,
             'original_price' => $product->original_price,
+            'original_price_pretty' => number_format($product->original_price),
             'thumbnail' => $product->thumbnail,
             'thumbnail_url' => $this->fileService->uploaded_url($product->thumbnail),
             'creator_id' => $product->creator_id
