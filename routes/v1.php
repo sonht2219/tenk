@@ -6,6 +6,7 @@ Route::group([
     Route::get('', 'Api\LotterySessionController@sellingSessions');
     Route::get('count-downing', 'Api\LotterySessionController@countDowningSessions');
     Route::get('list-opening-ended', 'Api\LotterySessionController@listSessionOpeningAndEnded');
+    Route::get('single-by-product', 'Api\LotterySessionController@singleByProductAndStatus');
     Route::get('{id}', 'Api\LotterySessionController@single');
     Route::get('{id}/history', 'Api\LotterySessionController@historyLotterySession');
     Route::group(['prefix' => '', 'middleware' => 'auth:jwt'], function () {

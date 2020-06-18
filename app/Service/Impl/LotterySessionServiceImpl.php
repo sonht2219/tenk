@@ -14,6 +14,7 @@ use App\Repositories\Contract\ProductRepository;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Lottery\HasLotterySessionIdCriteria;
 use App\Repositories\Criteria\Lottery\LotterySearchCriteria;
+use App\Repositories\Criteria\LotterySession\HasProductIdCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionSearchCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionWithProductCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionWithRelationCriteria;
@@ -45,6 +46,15 @@ class LotterySessionServiceImpl implements LotterySessionService
             $session->load('reward', 'reward.user', 'reward.lottery');
         }
         return $session;
+    }
+
+    public function singleByProductAndStatus($product_id, $status = LotterySessionStatus::SELLING)
+    {
+        $this->lotterySessionRepo->pushCriteria(new HasProductIdCriteria($product_id));
+        $this->lotterySessionRepo->pushCriteria(new HasStatusCriteria($status));
+        $this->lotterySessionRepo->pushCriteria(LotterySessionWithProductCriteria::class);
+
+        return $this->lotterySessionRepo->first();
     }
 
     public function historyLotterySession($session_id, $limit): LengthAwarePaginator
