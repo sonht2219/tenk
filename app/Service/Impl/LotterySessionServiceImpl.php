@@ -45,7 +45,6 @@ class LotterySessionServiceImpl implements LotterySessionService
             $reward = $session->reward;
             $reward->lottery;
             $reward->user;
-            $reward->session;
         }
         return $session;
     }
