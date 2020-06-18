@@ -42,9 +42,7 @@ class LotterySessionServiceImpl implements LotterySessionService
         /** @var LotterySession $session */
         $session = $this->lotterySessionRepo->find($id);
         if ($session->status == LotterySessionStatus::ENDING) {
-            $reward = $session->reward;
-            $reward->lottery;
-            $reward->user;
+            $session->load('reward', 'reward.user', 'reward.lottery');
         }
         return $session;
     }
