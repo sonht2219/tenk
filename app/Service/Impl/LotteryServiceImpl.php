@@ -99,7 +99,7 @@ class LotteryServiceImpl implements LotteryService
             $this->countDownLotterySession($lottery_session, $now);
             $this->createLotterySession($lottery_session->product);
             dispatch(new CalculateRewardForLotterySession($lottery_session))
-                ->delay(Carbon::now()->addMilliseconds($this->getTimeCountDown()));
+                ->delay(Carbon::now()->addMilliseconds($this->getTimeCountDown() - 1 * 1000));
             event(new LotterySessionStartCountDown($lottery_session));
         }
 
@@ -139,7 +139,7 @@ class LotteryServiceImpl implements LotteryService
     }
 
     public function getTimeCountDown() {
-        return 3 * 60 * 1000 - 1000;
+        return 3 * 60 * 1000;
     }
 
 }
