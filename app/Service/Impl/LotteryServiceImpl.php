@@ -96,10 +96,11 @@ class LotteryServiceImpl implements LotteryService
         $lottery_session->update(['sold_quantity' => $sold_quantity]);
 
         if ($sold_quantity == $lottery_session->product->price) {
+            $delay = $this->getTimeCountDown() - 1 * 1000;
             $this->countDownLotterySession($lottery_session, $now);
             $this->createLotterySession($lottery_session->product);
             dispatch(new CalculateRewardForLotterySession($lottery_session))
-                ->delay(Carbon::now()->addMilliseconds($this->getTimeCountDown() - 1 * 1000));
+                ->delay(Carbon::now()->addMilliseconds($delay));
             event(new LotterySessionStartCountDown($lottery_session));
         }
 
