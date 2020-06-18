@@ -139,7 +139,7 @@ class LotteryServiceImpl implements LotteryService
     }
 
     public function getTimeCountDown() {
-        return 3 * 60 * 1000;
+        return 3 * 60 * 1000 - 1000;
     }
 
 }
