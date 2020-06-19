@@ -54,7 +54,7 @@ class LotterySessionServiceImpl implements LotterySessionService
         $this->lotterySessionRepo->pushCriteria(new HasStatusCriteria($status));
         $this->lotterySessionRepo->pushCriteria(LotterySessionWithProductCriteria::class);
 
-        return $this->lotterySessionRepo->first();
+        return $this->lotterySessionRepo->firstOrFail();
     }
 
     public function historyLotterySession($session_id, $limit): LengthAwarePaginator
