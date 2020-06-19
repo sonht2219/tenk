@@ -7,6 +7,7 @@ namespace App\Service\Impl;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Exceptions\ExecuteException;
+use App\Http\Requests\BuyLotteryRequest;
 use App\Models\Lottery;
 use App\Models\LotterySession;
 use App\Models\Product;
@@ -65,19 +66,29 @@ class LotteryServiceImpl implements LotteryService
         return $this->lotteryRepo->all();
     }
 
-    public function buyLotteries($session_id, $lottery_ids)
+    public function buyLotteries(BuyLotteryRequest $req)
     {
         $now = round(microtime(true) * 1000);
         /** @var User $user */
         $user = Auth::user();
         /** @var LotterySession $lottery_session */
-        $lottery_session = $this->lotterySessionRepo->findByIdWithRelations($session_id, ['product']);
+        $lottery_session = $this->lotterySessionRepo->findByIdWithRelations($req->get('session_id'), ['product']);
         if ($lottery_session->status != LotterySessionStatus::SELLING)
             throw new ExecuteException(__('Đợt tham gia này đã kết thúc bán phiếu'));
 
-        $lotteries = $this->lotteryRepo->findWhereIn('id', $lottery_ids);
-        if (count($invalids = $this->findInvalidLotteries($lotteries, $lottery_session)))
-            throw new ExecuteException(__('Phiếu ' . implode(', ', $invalids) . ' không hợp lệ. Vui lòng chọn phiếu khác'));
+        $choose_lottery = $req->get('choose_lottery');
+        if ($choose_lottery) {
+            $lottery_ids = $req->get('lottery_ids');
+            $lotteries = $this->lotteryRepo->findWhereIn('id', $lottery_ids);
+            if (count($invalids = $this->findInvalidLotteries($lotteries, $lottery_session)))
+                throw new ExecuteException(__('Phiếu ' . implode(', ', $invalids) . ' không hợp lệ. Vui lòng chọn phiếu khác'));
+        } else {
+            $lottery_quantity = $req->get('lottery_quantity');
+            if ($lottery_session->sold_quantity + $lottery_quantity > $lottery_session->product->price)
+                throw new ExecuteException('Số lượng phiếu không đủ');
+            $lotteries = $this->lotteryRepo->randomLotteries($lottery_session->id, $lottery_quantity);
+            $lottery_ids = $lotteries->map(fn($lottery) => $lottery->id)->toArray();
+        }
 
         $amount_lotteries = count($lotteries);
         $sold_quantity = $lottery_session->sold_quantity += $amount_lotteries;
@@ -104,7 +115,7 @@ class LotteryServiceImpl implements LotteryService
             event(new LotterySessionStartCountDown($lottery_session));
         }
 
-        return ['data' => true];
+        return $this->lotteryRepo->findWhereIn('id', $lottery_ids);
     }
 
     /**

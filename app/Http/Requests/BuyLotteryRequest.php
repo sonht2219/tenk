@@ -14,10 +14,17 @@ class BuyLotteryRequest extends ValidatedRequest
      */
     public function rules()
     {
+        $choose_lottery = $this->request->get('choose_lottery');
+        if ($choose_lottery) {
+            return [
+                'session_id' => ['required', 'numeric', 'exists:lottery_sessions,id'],
+                'lottery_ids' => ['required', 'array'],
+                'lottery_ids.*' => ['required', 'numeric', 'exists:lotteries,id']
+            ];
+        }
         return [
             'session_id' => ['required', 'numeric', 'exists:lottery_sessions,id'],
-            'lottery_ids' => ['required', 'array'],
-            'lottery_ids.*' => ['required', 'numeric', 'exists:lotteries,id']
+            'lottery_quantity' => ['required', 'numeric']
         ];
     }
 }
