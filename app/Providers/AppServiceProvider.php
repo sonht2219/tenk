@@ -18,6 +18,8 @@ use App\Service\Impl\LotteryRewardServiceImpl;
 use App\Service\Impl\LotteryServiceImpl;
 use App\Service\Impl\LotterySessionServiceImpl;
 use App\Service\Impl\ProductServiceImpl;
+use App\Services\Contract\RegionService;
+use App\Services\Impl\RegionServiceImpl;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         LotterySessionService::class => LotterySessionServiceImpl::class,
         LotteryRewardService::class => LotteryRewardServiceImpl::class,
         FeedbackService::class => FeedBackServiceImpl::class,
-
+        RegionService::class => RegionServiceImpl::class,
         FileService::class => FileServiceImpl::class,
     ];
     /**
