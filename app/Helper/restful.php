@@ -8,6 +8,7 @@
 
 use App\Exceptions\ExecuteException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 
 if (!function_exists("restful_success")) {
@@ -59,6 +60,8 @@ if (!function_exists("restful_exception")) {
             return restful_error($exception->validator->errors()->first());
         } elseif ($exception instanceof ExecuteException) {
             return restful_error($exception->getMessage(), $exception->getCode());
+        } elseif ($exception instanceof ModelNotFoundException) {
+            return restful_error(__('messages.not_found'));
         } else {
             return restful_error(
                 config('app.debug') ? $exception->getMessage() : __('messages.failed'),
