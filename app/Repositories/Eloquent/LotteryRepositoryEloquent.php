@@ -3,8 +3,10 @@
 namespace App\Repositories\Eloquent;
 
 use App\Enum\Status\CommonStatus;
+use App\Enum\Status\LotteryStatus;
 use App\Repositories\Common\RepositoryEloquent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -70,6 +72,16 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
             ->orderBy('created_at', 'desc')
             ->with(['user'])
             ->paginate($limit);
+    }
+
+    public function randomLotteries($session_id, $limit): Collection
+    {
+        return $this->model->newQuery()
+            ->where('session_id', $session_id)
+            ->where('status', LotteryStatus::WAITING)
+            ->inRandomOrder()
+            ->limit($limit)
+            ->get();
     }
 
     public function countJoinTimesOfUserInSession($user_id, $session_id): int

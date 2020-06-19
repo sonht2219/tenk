@@ -36,10 +36,7 @@ class LotteryController extends Controller
     }
 
     public function buyLotteries(BuyLotteryRequest $req) {
-        $session_id = $req->get('session_id');
-        $lottery_ids = $req->get('lottery_ids');
-
-        return $this->lotteryService->buyLotteries($session_id, $lottery_ids);
+        return $this->lotteryService->buyLotteries($req);
     }
 
     public function allLotteriesOfUserInSession(AllLotteryByUserAndSessionRequest $req) {
