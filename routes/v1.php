@@ -32,3 +32,10 @@ Route::group(['prefix' => 'lotteries'], function () {
 Route::group(['prefix' => 'rewards'], function () {
    Route::get('product/{product_id}', 'Api\LotteryRewardController@listRewardOfProduct') ;
 });
+
+Route::group(['prefix' => 'addresses', 'middleware' => 'auth:jwt'], function () {
+   Route::post('', 'Api\UserAddressController@createAddress');
+   Route::get('', 'Api\UserAddressController@listAddress');
+   Route::put('{id}', 'Api\UserAddressController@editAddress');
+   Route::delete('{id}', 'Api\UserAddressController@deleteAddress');
+});
