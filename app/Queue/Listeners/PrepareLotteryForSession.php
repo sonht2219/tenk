@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PrepareLotteryForSession implements ShouldQueue
 {
+    public $delay = 2;
     /**
      * @var LotteryService
      */
