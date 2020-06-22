@@ -31,6 +31,10 @@ Route::group(['prefix' => 'lotteries'], function () {
 
 Route::group(['prefix' => 'rewards'], function () {
    Route::get('product/{product_id}', 'Api\LotteryRewardController@listRewardOfProduct') ;
+   Route::group(['middleware' => 'auth:jwt'], function () {
+       Route::get('history', 'Api\LotteryRewardController@history');
+       Route::post('receive', 'Api\LotteryRewardController@receiveReward')->middleware('transaction');
+   });
 });
 
 Route::group(['prefix' => 'user-addresses', 'middleware' => 'auth:jwt'], function () {

@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Repositories\Contract\DistrictRepository;
 use App\Repositories\Contract\FeedbackRepository;
 use App\Repositories\Contract\LotteryRepository;
+use App\Repositories\Contract\LotteryRewardInfoRepository;
 use App\Repositories\Contract\LotteryRewardRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Contract\ProductRepository;
@@ -18,6 +19,7 @@ use App\Repositories\Contract\WalletRepository;
 use App\Repositories\Eloquent\DistrictRepositoryEloquent;
 use App\Repositories\Eloquent\FeedbackRepositoryEloquent;
 use App\Repositories\Eloquent\LotteryRepositoryEloquent;
+use App\Repositories\Eloquent\LotteryRewardInfoRepositoryEloquent;
 use App\Repositories\Eloquent\LotteryRewardRepositoryEloquent;
 use App\Repositories\Eloquent\LotterySessionRepositoryEloquent;
 use App\Repositories\Eloquent\ProductRepositoryEloquent;
@@ -41,6 +43,7 @@ class RepositoryProvider  extends ServiceProvider
         FeedbackRepository::class => FeedbackRepositoryEloquent::class,
         DistrictRepository::class => DistrictRepositoryEloquent::class,
         ProvinceRepository::class => ProvinceRepositoryEloquent::class,
-        UserAddressRepository::class => UserAddressRepositoryEloquent::class
+        UserAddressRepository::class => UserAddressRepositoryEloquent::class,
+        LotteryRewardInfoRepository::class => LotteryRewardInfoRepositoryEloquent::class
     ];
 }
