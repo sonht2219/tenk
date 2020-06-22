@@ -22,6 +22,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['prefix' => 'regions', 'middleware' => 'auth:jwt'], function () {
+    Route::get('provinces', 'Share\RegionController@provinces');
+    Route::get('provinces/{province_id}/district', 'Share\RegionController@districtOfProvince');
+});
+
 Route::group(['prefix' => 'web-views'], function () {
    Route::get('guide-join', function () {
        return view('web-views.guide-join');

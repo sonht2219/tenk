@@ -10,6 +10,7 @@ use App\Service\Contract\LotteryRewardService;
 use App\Service\Contract\LotteryService;
 use App\Service\Contract\LotterySessionService;
 use App\Service\Contract\ProductService;
+use App\Service\Contract\UserAddressService;
 use App\Service\Impl\AuthServiceImpl;
 use App\Service\Impl\DtoBuilderServiceImpl;
 use App\Service\Impl\FeedBackServiceImpl;
@@ -18,6 +19,9 @@ use App\Service\Impl\LotteryRewardServiceImpl;
 use App\Service\Impl\LotteryServiceImpl;
 use App\Service\Impl\LotterySessionServiceImpl;
 use App\Service\Impl\ProductServiceImpl;
+use App\Service\Impl\UserAddressServiceImpl;
+use App\Services\Contract\RegionService;
+use App\Services\Impl\RegionServiceImpl;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,7 +34,8 @@ class AppServiceProvider extends ServiceProvider
         LotterySessionService::class => LotterySessionServiceImpl::class,
         LotteryRewardService::class => LotteryRewardServiceImpl::class,
         FeedbackService::class => FeedBackServiceImpl::class,
-
+        RegionService::class => RegionServiceImpl::class,
+        UserAddressService::class => UserAddressServiceImpl::class,
         FileService::class => FileServiceImpl::class,
     ];
     /**

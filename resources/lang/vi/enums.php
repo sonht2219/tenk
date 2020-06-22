@@ -3,6 +3,7 @@
 use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
+use App\Enum\Type\UserAddressType;
 
 
 /**
@@ -55,6 +56,10 @@ return [
         LotterySessionStatus::COUNT_DOWNING => 'Đang đếm ngược',
         LotterySessionStatus::ENDING => 'Kết thúc',
         LotterySessionStatus::DELETED => 'Đã xóa'
+    ],
+    UserAddressType::class => [
+        UserAddressType::DEFAULT => 'Mặc định',
+        UserAddressType::NORMAL => 'Thường'
     ]
 //    CommentTargetType::class => [
 //        CommentTargetType::PRODUCT => 'Sản phẩm'
