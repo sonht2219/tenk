@@ -36,6 +36,7 @@ Route::group(['prefix' => 'rewards'], function () {
 Route::group(['prefix' => 'user-addresses', 'middleware' => 'auth:jwt'], function () {
    Route::post('', 'Api\UserAddressController@createAddress');
    Route::get('', 'Api\UserAddressController@listAddress');
+   Route::get('{id}', 'Api\UserAddressController@singleAddress');
    Route::put('{id}', 'Api\UserAddressController@editAddress');
    Route::delete('{id}', 'Api\UserAddressController@deleteAddress');
 });

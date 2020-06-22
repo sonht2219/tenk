@@ -37,6 +37,10 @@ class UserAddressController extends Controller
         return $this->dtoBuilder->buildUserAddressDto($this->userAddressService->delete($id, $this->user()));
     }
 
+    public function singleAddress($id) {
+        return $this->dtoBuilder->buildUserAddressDto($this->userAddressService->single($id, $this->user()));
+    }
+
     public function listAddress(Request $req) {
         return $this->userAddressService->list($this->user(), $req)->map(fn($address) => $this->dtoBuilder->buildUserAddressDto($address));
     }
