@@ -31,3 +31,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'Auth\ApiAuthController@register');
     Route::get('user-data', 'Auth\ApiAuthController@userData')->middleware('auth:jwt');
 });
+
+Route::group(['prefix' => 'regions', 'middleware' => 'auth:jwt'], function () {
+    Route::get('provinces', 'Share\RegionController@provinces');
+    Route::get('provinces/{province_id}/district', 'Share\RegionController@districtOfProvince');
+});
