@@ -177,7 +177,8 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'images' => $feedback->images
                 ? collect(explode(',', $feedback->images))
                     ->map(fn($img) => $this->fileService->uploaded_url($img))
-                : null
+                : null,
+            'content' => $feedback->content,
         ];
 
         if ($feedback->relationLoaded('user') && $feedback->user)
