@@ -87,6 +87,8 @@ class LotteryServiceImpl implements LotteryService
             if ($lottery_session->sold_quantity + $lottery_quantity > $lottery_session->product->price)
                 throw new ExecuteException('Số lượng phiếu không đủ');
             $lotteries = $this->lotteryRepo->randomLotteries($lottery_session->id, $lottery_quantity);
+            if (!$lotteries || !count($lotteries))
+                throw new ExecuteException(__('Hiện tại không có phiếu, vui lòng quay lại sau'));
             $lottery_ids = $lotteries->map(fn($lottery) => $lottery->id)->toArray();
         }
 
@@ -107,7 +109,7 @@ class LotteryServiceImpl implements LotteryService
         $lottery_session->update(['sold_quantity' => $sold_quantity]);
 
         if ($sold_quantity == $lottery_session->product->price) {
-            $delay = $this->getTimeCountDown() - 1 * 1000;
+            $delay = $this->getTimeCountDown() - 2 * 1000;
             $this->countDownLotterySession($lottery_session, $now);
             $this->createLotterySession($lottery_session->product);
             dispatch(new CalculateRewardForLotterySession($lottery_session))
