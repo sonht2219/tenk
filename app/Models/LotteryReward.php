@@ -61,4 +61,7 @@ class LotteryReward extends Model
         return $this->belongsTo(LotterySession::class, 'session_id');
     }
 
+    public function info() {
+        return $this->hasOne(LotteryRewardInfo::class, 'reward_id');
+    }
 }

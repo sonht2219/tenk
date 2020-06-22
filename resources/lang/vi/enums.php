@@ -3,6 +3,7 @@
 use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
+use App\Enum\Status\RewardStatus;
 use App\Enum\Type\UserAddressType;
 
 
@@ -60,6 +61,13 @@ return [
     UserAddressType::class => [
         UserAddressType::DEFAULT => 'Mặc định',
         UserAddressType::NORMAL => 'Thường'
+    ],
+    RewardStatus::class => [
+        RewardStatus::WAITING => 'Đang chờ nhận',
+        RewardStatus::PROCESSING => 'Đang xử lý',
+        RewardStatus::SHIPPING => 'Đang vận chuyển',
+        RewardStatus::DONE => 'Đã nhận',
+        RewardStatus::REJECTED => 'Đã hủy'
     ]
 //    CommentTargetType::class => [
 //        CommentTargetType::PRODUCT => 'Sản phẩm'

@@ -8,8 +8,9 @@ use App\Enum\Contract\LocalEnum;
 
 class RewardStatus extends LocalEnum
 {
-    const PROCESSING = 1;
-    const SHIPPING = 2;
-    const DONE = 3;
+    const WAITING = 1;
+    const PROCESSING = 2;
+    const SHIPPING = 3;
+    const DONE = 4;
     const REJECTED = -1;
 }

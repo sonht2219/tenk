@@ -28,7 +28,7 @@ class CreateLotteryRewardsTable extends Migration
             $table->timestamps();
 
             $table->tinyInteger('status')
-                ->default(RewardStatus::PROCESSING)
+                ->default(RewardStatus::WAITING)
                 ->comment(generate_db_comment(RewardStatus::getInstances()));
 		});
 	}
