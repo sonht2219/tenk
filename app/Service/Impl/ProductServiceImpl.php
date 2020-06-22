@@ -10,8 +10,11 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Queue\Events\ProductSaved;
 use App\Repositories\Contract\ProductRepository;
+use App\Repositories\Criteria\Common\HasStatusCriteria;
+use App\Repositories\Criteria\Product\ProductSearchCriteria;
 use App\Service\Contract\ProductService;
 use App\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductServiceImpl implements ProductService
 {
@@ -68,5 +71,24 @@ class ProductServiceImpl implements ProductService
         return $this->productRepo->exists(compact('slug'))
             ? $slug . round(microtime(true))
             : $slug;
+    }
+
+    public function list($limit, $search, $status): LengthAwarePaginator
+    {
+        if ($search)
+            $this->productRepo->pushCriteria(new ProductSearchCriteria($search));
+
+        if ($status)
+            $this->productRepo->pushCriteria(new HasStatusCriteria($status));
+
+        return $this->productRepo->paginate($limit);
+    }
+
+    public function delete($id): Product
+    {
+        $product = $this->singleProduct($id);
+
+        $product->status = CommonStatus::INACTIVE;
+        return $this->productRepo->save($product);
     }
 }
