@@ -30,40 +30,45 @@ class UserAddressServiceImpl implements UserAddressService
 
     public function create(User $user, UserAddressCreateRequest $req): UserAddress
     {
-        $data = $req->all();
-        $data['user_id'] = $user->id;
+        $user_address = (new UserAddress())->fill($req->filteredData());
+        $user_address->user_id = $user->id;
         $exist_address = $this->userAddressRepo->existUserAddress($user->id);
-        if (!$exist_address && (!isset($data['type']) || $data['type'] != UserAddressType::DEFAULT))
-            $data['type'] = UserAddressType::DEFAULT;
-        if ($exist_address && isset($data['type']) && $data['type'] == UserAddressType::DEFAULT)
+        if (!$exist_address && (!$user_address->type || $user_address->type != UserAddressType::DEFAULT))
+            $user_address->type = UserAddressType::DEFAULT;
+        if ($exist_address && $user_address->type == UserAddressType::DEFAULT)
             $this->userAddressRepo->updateDefaultToNormalType($user->id);
-        return $this->userAddressRepo->create($data);
+        return $this->userAddressRepo->save($user_address);
     }
 
     public function edit($id, User $user, UserAddressEditRequest $req): UserAddress
     {
         $type = $req->get('type');
         /** @var UserAddress $user_address */
-        $user_address = $this->userAddressRepo->find($id);
-        if ($user_address->user_id != $user->id)
-            throw new ExecuteException(__('Địa chỉ không phải của bạn, bạn không thể sửa'));
+        $user_address = $this->single($id, $user);
         if ($user_address->type == UserAddressType::DEFAULT && $type == UserAddressType::NORMAL)
             throw new ExecuteException(__('Không thể bỏ chọn địa chỉ mặc định. Bạn có thể chọn địa chỉ khác làm địa chỉ mặc định'));
         if ($user_address->type == UserAddressType::NORMAL && $type == UserAddressType::DEFAULT)
             $this->userAddressRepo->updateDefaultToNormalType($user->id);
-        return $this->userAddressRepo->update($req->all(), $id);
+        return $this->userAddressRepo->update($req->filteredData(), $id);
     }
 
     public function delete($id, User $user): UserAddress
     {
         /** @var UserAddress $user_address */
-        $user_address = $this->userAddressRepo->find($id);
-        if ($user_address->user_id != $user->id)
-            throw new ExecuteException(__('Địa chỉ không phải của bạn, bạn không thể xóa'));
+        $user_address = $this->single($id, $user);
         if ($user_address->type == UserAddressType::DEFAULT)
             throw new ExecuteException(__('Không thể xóa địa chỉ mặc định'));
 
         return $this->userAddressRepo->update(['status' => CommonStatus::INACTIVE], $id);
+    }
+
+    public function single($id, User $user): UserAddress
+    {
+        /** @var UserAddress $user_address */
+        $user_address = $this->userAddressRepo->find($id);
+        if ($user_address->user_id != $user->id)
+            throw new ExecuteException(__('Địa chỉ không phải của bạn'));
+        return $user_address;
     }
 
     public function list(User $user, Request $req): Collection
