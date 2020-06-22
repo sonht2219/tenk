@@ -8,12 +8,14 @@ use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Enum\Status\RewardStatus;
+use App\Enum\Type\UserAddressType;
 use App\Helper\Constant;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
 use App\Models\LotterySession;
 use App\Models\Product;
+use App\Models\UserAddress;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FileService;
 use App\User;
@@ -191,5 +193,33 @@ class DtoBuilderServiceImpl implements DtoBuilderService
 
         return $result;
 
+    }
+
+    public function buildUserAddressDto(UserAddress $user_address)
+    {
+        $result = [
+            'id' => $user_address->id,
+            'user_id' => $user_address->user_id,
+            'name' => $user_address->name,
+            'phone_number' => $user_address->phone_number,
+            'address' => $user_address->address,
+            'province_id' => $user_address->province_id,
+            'district_id' => $user_address->district_id,
+            'province' => null,
+            'district' => null,
+            'type' => $user_address->type,
+            'type_title' => UserAddressType::getDescription($user_address->type),
+            'status' => $user_address->status,
+            'status_title' => CommonStatus::getDescription($user_address->status),
+            'created_at' => $user_address->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $user_address->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
+        ];
+
+        if ($user_address->relationLoaded('province') && $user_address->province)
+            $result['province'] = $user_address->province;
+        if ($user_address->relationLoaded('district') && $user_address->district)
+            $result['district'] = $user_address->district;
+
+        return $result;
     }
 }
