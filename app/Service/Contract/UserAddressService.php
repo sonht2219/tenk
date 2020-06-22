@@ -16,5 +16,6 @@ interface UserAddressService
     public function create(User $user, UserAddressCreateRequest $req): UserAddress;
     public function edit($id, User $user, UserAddressEditRequest $req): UserAddress;
     public function delete($id, User $user): UserAddress;
+    public function single($id, User $user): UserAddress;
     public function list(User $user, Request $req): Collection;
 }
