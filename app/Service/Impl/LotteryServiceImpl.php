@@ -4,6 +4,7 @@
 namespace App\Service\Impl;
 
 
+use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Exceptions\ExecuteException;
@@ -108,7 +109,7 @@ class LotteryServiceImpl implements LotteryService
 
         $lottery_session->update(['sold_quantity' => $sold_quantity]);
 
-        if ($sold_quantity == $lottery_session->product->price) {
+        if ($sold_quantity == $lottery_session->product->price && $lottery_session->product->status == CommonStatus::ACTIVE) {
             $delay = $this->getTimeCountDown() - 2 * 1000;
             $this->countDownLotterySession($lottery_session, $now);
             $this->createLotterySession($lottery_session->product);

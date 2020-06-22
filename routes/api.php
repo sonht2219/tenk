@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'admin', 'middleware'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:jwt'], function () {
    require_once __DIR__ . '/admin.php';
 });
 
@@ -29,5 +29,5 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'Auth\ApiAuthController@login');
     Route::post('register', 'Auth\ApiAuthController@register');
-    Route::get('user-data', 'Auth\ApiAuthController@userData');
+    Route::get('user-data', 'Auth\ApiAuthController@userData')->middleware('auth:jwt');
 });
