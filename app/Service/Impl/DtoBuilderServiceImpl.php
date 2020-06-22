@@ -34,6 +34,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
     {
         $images = explode(',', $product->images);
         $result = [
+            'id' => $product->id,
             'name' => $product->name,
             'slug' => $product->slug,
             'description' => $product->description,
