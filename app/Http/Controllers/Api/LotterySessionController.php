@@ -70,4 +70,12 @@ class LotterySessionController extends Controller
             'meta' => get_meta($sessions)
         ];
     }
+
+    public function historyMine(Request $req) {
+        $sessions = $this->lotterySessionService->historyMine($req, $this->user());
+        return [
+            'datas' => collect($sessions->items())->map(fn($session) => $this->dtoBuilder->buildLotterySessionDto($session)),
+            'meta' => get_meta($sessions)
+        ];
+    }
 }

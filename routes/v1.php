@@ -7,6 +7,7 @@ Route::group([
     Route::get('count-downing', 'Api\LotterySessionController@countDowningSessions');
     Route::get('list-opening-ended', 'Api\LotterySessionController@listSessionOpeningAndEnded');
     Route::get('single-by-product', 'Api\LotterySessionController@singleByProductAndStatus');
+    Route::get('history-mine', 'Api\LotterySessionController@historyMine')->middleware('auth:jwt');
     Route::get('{id}', 'Api\LotterySessionController@single');
     Route::get('{id}/history', 'Api\LotterySessionController@historyLotterySession');
     Route::group(['prefix' => '', 'middleware' => 'auth:jwt'], function () {
@@ -40,6 +41,7 @@ Route::group(['prefix' => 'rewards'], function () {
 Route::group(['prefix' => 'user-addresses', 'middleware' => 'auth:jwt'], function () {
    Route::post('', 'Api\UserAddressController@createAddress');
    Route::get('', 'Api\UserAddressController@listAddress');
+   Route::get('single-default', 'Api\UserAddressController@singleAddressDefault');
    Route::get('{id}', 'Api\UserAddressController@singleAddress');
    Route::put('{id}', 'Api\UserAddressController@editAddress');
    Route::delete('{id}', 'Api\UserAddressController@deleteAddress');

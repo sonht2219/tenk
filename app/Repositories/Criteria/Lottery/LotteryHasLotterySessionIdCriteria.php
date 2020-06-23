@@ -7,13 +7,12 @@ namespace App\Repositories\Criteria\Lottery;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
-class HasUserIdCriteria implements CriteriaInterface
+class LotteryHasLotterySessionIdCriteria implements CriteriaInterface
 {
-
-    private $user_id;
-    public function __construct($user_id)
+    private $session_id;
+    public function __construct($session_id)
     {
-        $this->user_id = $user_id;
+        $this->session_id = $session_id;
     }
 
     /**
@@ -21,6 +20,6 @@ class HasUserIdCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('user_id', $this->user_id);
+        return $model->where('session_id', $this->session_id);
     }
 }

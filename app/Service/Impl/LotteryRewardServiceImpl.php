@@ -17,9 +17,10 @@ use App\Repositories\Contract\LotteryRewardInfoRepository;
 use App\Repositories\Contract\LotteryRewardRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Contract\UserAddressRepository;
+use App\Repositories\Criteria\Common\BelongToUserCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Common\OrderByCreatedAtDescCriteria;
-use App\Repositories\Criteria\LotteryReward\BelongToSessionHasProductIdCriteria;
+use App\Repositories\Criteria\LotteryReward\LotteryRewardBelongToSessionHasProductIdCriteria;
 use App\Repositories\Criteria\LotteryReward\HasUserIdCriteria;
 use App\Repositories\Criteria\LotteryReward\LotteryRewardWithRelationsCriteria;
 use App\Service\Contract\LotteryRewardService;
@@ -70,7 +71,7 @@ class LotteryRewardServiceImpl implements LotteryRewardService
 
     public function listRewardOfProduct($product_id, $limit): LengthAwarePaginator
     {
-        $this->rewardRepo->pushCriteria(new BelongToSessionHasProductIdCriteria($product_id));
+        $this->rewardRepo->pushCriteria(new LotteryRewardBelongToSessionHasProductIdCriteria($product_id));
         $this->rewardRepo->pushCriteria(LotteryRewardWithRelationsCriteria::class);
         $this->rewardRepo->pushCriteria(OrderByCreatedAtDescCriteria::class);
 
@@ -85,7 +86,7 @@ class LotteryRewardServiceImpl implements LotteryRewardService
     {
         $status = $req->get('status') ?: RewardStatus::WAITING;
         $limit = $req->get('limit') ?: 10;
-        $this->rewardRepo->pushCriteria(new HasUserIdCriteria($user->id));
+        $this->rewardRepo->pushCriteria(new BelongToUserCriteria($user->id));
         $this->rewardRepo->pushCriteria(new HasStatusCriteria($status));
         $this->rewardRepo->pushCriteria(LotteryRewardWithRelationsCriteria::class);
 

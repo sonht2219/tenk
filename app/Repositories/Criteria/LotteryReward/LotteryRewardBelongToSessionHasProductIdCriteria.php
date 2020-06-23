@@ -1,13 +1,14 @@
 <?php
 
 
-namespace App\Repositories\Criteria\LotterySession;
+namespace App\Repositories\Criteria\LotteryReward;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
-class HasProductIdCriteria implements CriteriaInterface
+class LotteryRewardBelongToSessionHasProductIdCriteria implements CriteriaInterface
 {
 
     private $product_id;
@@ -22,6 +23,8 @@ class HasProductIdCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('product_id', $this->product_id);
+        return $model->whereHas('session', function (Builder $q) {
+            $q->where('product_id', $this->product_id);
+        });
     }
 }
