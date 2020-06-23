@@ -7,13 +7,14 @@ namespace App\Repositories\Criteria\UserAddress;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
-class HasUserIdCriteria implements CriteriaInterface
+class UserAddressHasTypeCriteria implements CriteriaInterface
 {
-    private $user_id;
 
-    public function __construct($user_id)
+    private $type;
+
+    public function __construct($type)
     {
-        $this->user_id = $user_id;
+        $this->type = $type;
     }
 
     /**
@@ -21,6 +22,6 @@ class HasUserIdCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('user_id', $this->user_id);
+        return $model->where('type', $this->type);
     }
 }
