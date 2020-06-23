@@ -10,5 +10,5 @@ use App\Repositories\Common\Repository;
  */
 interface LotteryRewardInfoRepository extends Repository
 {
-    //
+    public function findByRewardId($reward_id);
 }

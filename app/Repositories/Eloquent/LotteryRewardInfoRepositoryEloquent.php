@@ -36,4 +36,10 @@ class LotteryRewardInfoRepositoryEloquent extends RepositoryEloquent implements 
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    public function findByRewardId($reward_id)
+    {
+        return $this->model->newQuery()
+            ->where('reward_id', $reward_id)
+            ->first();
+    }
 }

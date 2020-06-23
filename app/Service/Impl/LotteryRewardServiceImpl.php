@@ -109,7 +109,7 @@ class LotteryRewardServiceImpl implements LotteryRewardService
 
         $reward->update(['status' => RewardStatus::PROCESSING]);
 
-        $reward_info = new LotteryRewardInfo();
+        $reward_info = $this->retrieveRewardInfo($reward->id);
         $reward_info->reward()->associate($reward);
         $reward_info->name = $user_address->name;
         $reward_info->phone_number = $user_address->phone_number;
@@ -119,5 +119,16 @@ class LotteryRewardServiceImpl implements LotteryRewardService
         $this->rewardInfoRepo->save($reward_info);
 
         return $reward;
+    }
+
+    /**
+     * @param $reward_id
+     * @return LotteryRewardInfo
+     */
+    private function retrieveRewardInfo($reward_id) {
+        $reward_info = $this->rewardInfoRepo->findByRewardId($reward_id);
+        if (!$reward_info)
+            $reward_info = new LotteryRewardInfo();
+        return $reward_info;
     }
 }
