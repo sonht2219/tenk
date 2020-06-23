@@ -16,8 +16,8 @@ use App\Queue\Events\LotterySessionStartCountDown;
 use App\Queue\Jobs\CalculateRewardForLotterySession;
 use App\Repositories\Contract\LotteryRepository;
 use App\Repositories\Contract\LotterySessionRepository;
-use App\Repositories\Criteria\Lottery\HasLotterySessionIdCriteria;
-use App\Repositories\Criteria\Lottery\HasUserIdCriteria;
+use App\Repositories\Criteria\Common\BelongToUserCriteria;
+use App\Repositories\Criteria\Lottery\LotteryHasLotterySessionIdCriteria;
 use App\Repositories\Criteria\Lottery\LotterySearchCriteria;
 use App\Service\Contract\LotteryService;
 use App\Service\Traits\CanUseWallet;
@@ -52,7 +52,7 @@ class LotteryServiceImpl implements LotteryService
 
     public function listLotteries($id, $search, $limit = 10): LengthAwarePaginator
     {
-        $this->lotteryRepo->pushCriteria(new HasLotterySessionIdCriteria($id));
+        $this->lotteryRepo->pushCriteria(new LotteryHasLotterySessionIdCriteria($id));
 
         if ($search)
             $this->lotteryRepo->pushCriteria(new LotterySearchCriteria($search));
@@ -62,8 +62,8 @@ class LotteryServiceImpl implements LotteryService
 
     public function allLotteriesOfUserInLotterySession($session_id, $user_id)
     {
-        $this->lotteryRepo->pushCriteria(new HasLotterySessionIdCriteria($session_id));
-        $this->lotteryRepo->pushCriteria(new HasUserIdCriteria($user_id));
+        $this->lotteryRepo->pushCriteria(new LotteryHasLotterySessionIdCriteria($session_id));
+        $this->lotteryRepo->pushCriteria(new BelongToUserCriteria($user_id));
         return $this->lotteryRepo->all();
     }
 

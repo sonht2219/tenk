@@ -47,17 +47,26 @@ class LotterySessionRepositoryEloquent extends RepositoryEloquent implements Lot
 
     public function listSessionOpeningAndEnded($limit)
     {
-        return $this->model->newQuery()
-            ->leftJoin('lottery_rewards', 'lottery_sessions.id', 'lottery_rewards.session_id')
-            ->where(function (Builder $q) {
-                $q->where('lottery_sessions.status', LotterySessionStatus::COUNT_DOWNING)
-                    ->orWhere('lottery_sessions.status', LotterySessionStatus::ENDING);
-            })
-            ->orderBy('lottery_sessions.status')
-            ->orderBy('lottery_rewards.created_at', 'desc')
-            ->with(['product', 'reward.user', 'reward.lottery'])
-            ->select(['lottery_sessions.*'])
+        return $this->querySessionByStatus([LotterySessionStatus::COUNT_DOWNING, LotterySessionStatus::ENDING])
             ->paginate($limit);
     }
 
+    public function listSessionOfUserByStatus($user_id, $statuses, $limit)
+    {
+        return $this->querySessionByStatus($statuses)
+            ->whereHas('lotteries', function (Builder $q) use ($user_id){
+                return $q->where('user_id', $user_id);
+            })
+            ->paginate($limit);
+    }
+
+    public function querySessionByStatus($statuses) {
+        return $this->model->newQuery()
+            ->whereIn('lottery_sessions.status', $statuses)
+            ->leftJoin('lottery_rewards', 'lottery_sessions.id', 'lottery_rewards.session_id')
+            ->orderBy('lottery_sessions.status')
+            ->orderBy('lottery_rewards.created_at', 'desc')
+            ->with(['product', 'reward.user', 'reward.lottery'])
+            ->select(['lottery_sessions.*']);
+    }
 }

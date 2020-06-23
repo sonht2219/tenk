@@ -11,8 +11,10 @@ use App\Http\Requests\UserAddressCreateRequest;
 use App\Http\Requests\UserAddressEditRequest;
 use App\Models\UserAddress;
 use App\Repositories\Contract\UserAddressRepository;
+use App\Repositories\Criteria\Common\BelongToUserCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\UserAddress\HasUserIdCriteria;
+use App\Repositories\Criteria\UserAddress\UserAddressHasTypeCriteria;
 use App\Repositories\Criteria\UserAddress\UserAddressWithRelationCriteria;
 use App\Service\Contract\UserAddressService;
 use App\User;
@@ -71,9 +73,16 @@ class UserAddressServiceImpl implements UserAddressService
         return $user_address;
     }
 
+    public function singleDefault(User $user): UserAddress
+    {
+        $this->userAddressRepo->pushCriteria(new BelongToUserCriteria($user->id));
+        $this->userAddressRepo->pushCriteria(new UserAddressHasTypeCriteria(UserAddressType::DEFAULT));
+        return $this->userAddressRepo->firstOrFail();
+    }
+
     public function list(User $user, Request $req): Collection
     {
-        $this->userAddressRepo->pushCriteria(new HasUserIdCriteria($user->id));
+        $this->userAddressRepo->pushCriteria(new BelongToUserCriteria($user->id));
         $this->userAddressRepo->pushCriteria(new HasStatusCriteria(CommonStatus::ACTIVE));
         $this->userAddressRepo->pushCriteria(UserAddressWithRelationCriteria::class);
         return  $this->userAddressRepo->all();
