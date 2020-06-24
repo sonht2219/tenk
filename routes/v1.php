@@ -27,7 +27,7 @@ Route::group([
 });
 
 Route::group(['prefix' => 'lotteries'], function () {
-    Route::get('list-by-user', 'Api\LotteryController@allLotteriesOfUserInSession');
+    Route::get('detail-history-buy', 'Api\LotteryController@detailHistoryBuyLottery');
 });
 
 Route::group(['prefix' => 'rewards'], function () {

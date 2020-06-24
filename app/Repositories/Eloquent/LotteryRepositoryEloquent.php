@@ -90,4 +90,21 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
             ->where(compact('user_id', 'session_id'))
             ->count();
     }
+
+    public function findHistoryBuyLottery($session_id, $user_id)
+    {
+        return $this->model->newQuery()
+            ->where('session_id', $session_id)
+            ->where('user_id', $user_id)
+            ->groupBy('user_id')
+            ->select([
+                'user_id',
+                DB::raw('max(joined_at) as joined_at'),
+                DB::raw('count(*) as join_number'),
+                DB::raw('max(session_id) as session_id')
+            ])
+            ->orderBy('created_at', 'desc')
+            ->with(['user'])
+            ->get();
+    }
 }
