@@ -44,7 +44,10 @@ class LotterySessionController extends Controller
         ];
     }
     public function single($id, Request $req) {
-        return $this->dtoBuilder->buildLotterySessionDto($this->lotterySessionService->single($id));
+        return [
+            'session' => $this->dtoBuilder->buildLotterySessionDto($this->lotterySessionService->single($id)),
+            'user_joined' => $this->user() ? $this->lotterySessionService->userJoinedSession($id, $this->user()->id) : false
+        ];
     }
 
     public function singleByProductAndStatus(Request $req) {

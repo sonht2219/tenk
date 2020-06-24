@@ -69,4 +69,14 @@ class LotterySessionRepositoryEloquent extends RepositoryEloquent implements Lot
             ->with(['product', 'reward.user', 'reward.lottery'])
             ->select(['lottery_sessions.*']);
     }
+
+    public function userJoinedSession($session_id, $user_id)
+    {
+        return $this->model->newQuery()
+            ->where('id', $session_id)
+            ->whereHas('lotteries', function (Builder $q) use ($user_id){
+                return $q->where('user_id', $user_id);
+            })
+            ->exists();
+    }
 }
