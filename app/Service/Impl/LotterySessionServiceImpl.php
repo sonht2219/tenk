@@ -89,4 +89,9 @@ class LotterySessionServiceImpl implements LotterySessionService
 
         return $this->lotterySessionRepo->listSessionOfUserByStatus($user->id, $statuses, $limit);
     }
+
+    public function userJoinedSession($session_id, $user_id): bool
+    {
+        return $this->lotterySessionRepo->userJoinedSession($session_id, $user_id);
+    }
 }

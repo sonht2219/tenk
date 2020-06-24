@@ -14,4 +14,5 @@ interface LotterySessionRepository extends Repository
     public function findByIdWithRelations($id, $relations);
     public function listSessionOpeningAndEnded($limit);
     public function listSessionOfUserByStatus($user_id, $statuses, $limit);
+    public function userJoinedSession($session_id, $user_id);
 }

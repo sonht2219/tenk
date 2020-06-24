@@ -77,6 +77,7 @@ class UserAddressServiceImpl implements UserAddressService
     {
         $this->userAddressRepo->pushCriteria(new BelongToUserCriteria($user->id));
         $this->userAddressRepo->pushCriteria(new UserAddressHasTypeCriteria(UserAddressType::DEFAULT));
+        $this->userAddressRepo->pushCriteria(UserAddressWithRelationCriteria::class);
         return $this->userAddressRepo->firstOrFail();
     }
 
