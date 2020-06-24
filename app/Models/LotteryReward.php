@@ -33,6 +33,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotteryReward whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotteryReward whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\LotteryRewardInfo|null $info
  */
 class LotteryReward extends Model
 {
