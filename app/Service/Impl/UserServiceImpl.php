@@ -9,6 +9,7 @@ use App\Exceptions\ExecuteException;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\UpdateProfileUserRequest;
+use App\Repositories\Contract\UserRepository;
 use App\Repositories\Contract\WalletRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
 use App\Service\Contract\FileService;
@@ -19,11 +20,13 @@ class UserServiceImpl implements UserService
 {
     private WalletRepository $walletRepo;
     private FileService $fileService;
+    private UserRepository $userRepo;
 
-    public function __construct(WalletRepository $walletRepo, FileService $fileService)
+    public function __construct(WalletRepository $walletRepo, UserRepository $userRepo,  FileService $fileService)
     {
         $this->walletRepo = $walletRepo;
         $this->fileService = $fileService;
+        $this->userRepo = $userRepo;
     }
 
     public function wallet(User $user)
@@ -38,6 +41,8 @@ class UserServiceImpl implements UserService
         if (isset($data['avatar_file']))
             $data['avatar'] = $this->fileService->storeFile($data['avatar_file'], UploadFolder::AVATARS);
 
+        $user->fill($data);
+        return $this->userRepo->save($user);
     }
 
     public function filterDataUpdateProfile(UpdateProfileUserRequest $req) {
