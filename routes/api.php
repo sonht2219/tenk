@@ -29,10 +29,10 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'Auth\ApiAuthController@login');
     Route::post('register', 'Auth\ApiAuthController@register');
+    Route::post('forget-password', 'Auth\ApiAuthController@forgetPassword');
     Route::group(['middleware' => 'auth:jwt'], function () {
         Route::get('user-data', 'Auth\ApiAuthController@userData');
-        Route::post('change-password', 'Api\ApiAuthController@changePassword');
-        Route::post('forget-password', 'Api\ApiAuthController@forgetPassword');
+        Route::post('change-password', 'Auth\ApiAuthController@changePassword');
     });
 });
 

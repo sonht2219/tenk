@@ -48,7 +48,11 @@ class ApiAuthController extends Controller
         ];
     }
 
-    public function changePassword(ChangePasswordRequest $req) {}
+    public function changePassword(ChangePasswordRequest $req) {
+        return $this->dtoBuilder->buildUserDto($this->authService->changePassword($req, $this->user()));
+    }
 
-    public function forgetPassword(ForgetPasswordRequest $req) {}
+    public function forgetPassword(ForgetPasswordRequest $req) {
+        return $this->authService->forgetPassword($req, $this->user());
+    }
 }

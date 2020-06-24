@@ -42,8 +42,7 @@ interface AuthService
 
     /**
      * @param ForgetPasswordRequest $req
-     * @param User $user
      * @return mixed
      */
-    public function forgetPassword(ForgetPasswordRequest $req, User $user);
+    public function forgetPassword(ForgetPasswordRequest $req);
 }

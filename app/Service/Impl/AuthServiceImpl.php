@@ -80,19 +80,19 @@ class AuthServiceImpl implements AuthService
 
     public function changePassword(ChangePasswordRequest $req, User $user)
     {
-        if ($user->getAuthPassword() && \Hash::check($req->get('old_password'), $user->getAuthPassword()))
+        if ($user->getAuthPassword() && !\Hash::check($req->get('old_password'), $user->getAuthPassword()))
             throw new ExecuteException(__('Mật khẩu cũ không chính xác'));
 
         $user->password = \Hash::make($req->get('password'));
         return $this->userRepo->save($user);
     }
 
-    public function forgetPassword(ForgetPasswordRequest $req, User $user)
+    public function forgetPassword(ForgetPasswordRequest $req)
     {
         $response = $this->password_broker->sendResetLink($req->only('email'));
         if ($response != Password::RESET_LINK_SENT)
             throw new ExecuteException(__('Đã xảy ra lỗi. Vui lòng thử lại sau'));
 
-        return true;
+        return null;
     }
 }
