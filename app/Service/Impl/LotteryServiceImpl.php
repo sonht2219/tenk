@@ -67,6 +67,11 @@ class LotteryServiceImpl implements LotteryService
         return $this->lotteryRepo->all();
     }
 
+    public function getHistoryBuyLotteryOfSession($session_id, $user_id)
+    {
+        return $this->lotteryRepo->findHistoryBuyLottery($session_id, $user_id);
+    }
+
     public function buyLotteries(BuyLotteryRequest $req)
     {
         $now = round(microtime(true) * 1000);

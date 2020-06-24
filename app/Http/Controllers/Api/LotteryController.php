@@ -39,9 +39,13 @@ class LotteryController extends Controller
         return $this->lotteryService->buyLotteries($req);
     }
 
-    public function allLotteriesOfUserInSession(AllLotteryByUserAndSessionRequest $req) {
+    public function detailHistoryBuyLottery(AllLotteryByUserAndSessionRequest $req) {
         $session_id = $req->get('session_id');
         $user_id = $req->get('user_id');
-        return $this->lotteryService->allLotteriesOfUserInLotterySession($session_id, $user_id);
+        $history = $this->lotteryService->getHistoryBuyLotteryOfSession($session_id, $user_id);
+        return [
+            'lotteries' => $this->lotteryService->allLotteriesOfUserInLotterySession($session_id, $user_id),
+            'history' => $history && count($history) ? $this->dtoBuilder->buildHistoryLotteryDto($history[0]) : null
+        ];
     }
 }

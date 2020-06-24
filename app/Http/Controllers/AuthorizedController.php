@@ -9,9 +9,20 @@
 namespace App\Http\Controllers;
 
 
+use Tymon\JWTAuth\JWTAuth;
+
 trait AuthorizedController
 {
     protected function user() {
-        return request()->user();
+        $user = request()->user();
+        if (!$user) {
+            try {
+                /** @var JWTAuth $jwtAuth */
+                $jwtAuth = app(JWTAuth::class);
+                $user = $jwtAuth->setToken(request()->bearerToken())->toUser();
+            } catch (\Exception $exception) {
+            }
+        }
+        return $user;
     }
 }
