@@ -6,6 +6,8 @@ namespace App\Service\Contract;
 
 use App\Exceptions\ExecuteException;
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 use App\User;
 
@@ -30,4 +32,18 @@ interface AuthService
      * @return string
      */
     public function generateToken(User $user);
+
+    /**
+     * @param ChangePasswordRequest $req
+     * @param User $user
+     * @return mixed
+     */
+    public function changePassword(ChangePasswordRequest $req, User $user);
+
+    /**
+     * @param ForgetPasswordRequest $req
+     * @param User $user
+     * @return mixed
+     */
+    public function forgetPassword(ForgetPasswordRequest $req, User $user);
 }

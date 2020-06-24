@@ -11,4 +11,5 @@ class UploadFolder extends Enum
     const PRODUCTS = 'products';
     const USERS = 'users';
     const BANNERS = 'banners';
+    const AVATARS = 'avatars';
 }

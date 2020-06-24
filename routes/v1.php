@@ -46,3 +46,8 @@ Route::group(['prefix' => 'user-addresses', 'middleware' => 'auth:jwt'], functio
    Route::put('{id}', 'Api\UserAddressController@editAddress');
    Route::delete('{id}', 'Api\UserAddressController@deleteAddress');
 });
+
+Route::group(['prefix' => 'users', 'middleware' => 'auth:jwt'], function () {
+    Route::get('wallet', 'Api\UserController@wallet');
+    Route::put('update-profile', 'Api\UserController@updateProfile');
+});
