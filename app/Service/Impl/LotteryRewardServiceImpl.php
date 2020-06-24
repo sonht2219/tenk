@@ -20,17 +20,19 @@ use App\Repositories\Contract\UserAddressRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Common\OrderByCreatedAtDescCriteria;
+use App\Repositories\Criteria\Common\WithRelationsCriteria;
 use App\Repositories\Criteria\LotteryReward\LotteryRewardBelongToSessionHasProductIdCriteria;
-use App\Repositories\Criteria\LotteryReward\HasUserIdCriteria;
+//use App\Repositories\Criteria\LotteryReward\HasUserIdCriteria;
+use App\Repositories\Criteria\LotteryReward\LotteryRewardHasInfoCriteria;
 use App\Repositories\Criteria\LotteryReward\LotteryRewardWithRelationsCriteria;
 use App\Service\Contract\LotteryRewardService;
 use App\Service\Helper\Lottery\LotteryWinnerRetriever;
 use App\Service\Helper\Lottery\LotteryWinnerRetrieverFactory;
 use App\Service\Helper\Lottery\LotteryWinnerRetrieverType;
 use App\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class LotteryRewardServiceImpl implements LotteryRewardService
 {
@@ -130,5 +132,35 @@ class LotteryRewardServiceImpl implements LotteryRewardService
         if (!$reward_info)
             $reward_info = new LotteryRewardInfo();
         return $reward_info;
+    }
+
+    public function list($limit, $user_id, $product_id, $status): LengthAwarePaginator
+    {
+        if ($user_id)
+            $this->rewardRepo->pushCriteria(new BelongToUserCriteria($user_id));
+        if ($product_id)
+            $this->rewardRepo->pushCriteria(new LotteryRewardBelongToSessionHasProductIdCriteria($product_id));
+        if ($status)
+            $this->rewardRepo->pushCriteria(new HasStatusCriteria($status));
+
+        $this->rewardRepo->with([
+            'session.product',
+            'lottery',
+            'info',
+            'user',
+            'info.district',
+            'info.province',
+        ]);
+
+        return $this->rewardRepo->paginate($limit);
+    }
+
+    public function updateRewardStatus($id, $status) {
+        /** @var LotteryReward $reward */
+        $reward = $this->rewardRepo->find($id);
+        if (!in_array($status, RewardStatus::getValues()))
+            throw new ExecuteException(__('Trạng thái không hợp lệ'));
+        $reward->status = $status;
+        return $this->rewardRepo->save($reward);
     }
 }

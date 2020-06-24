@@ -10,4 +10,9 @@ Route::group(['middleware' => 'auth:jwt'], function() {
     });
 
     Route::post('storage', 'Admin\StorageController@saveImage');
+
+    Route::group(['prefix' => 'rewards'], function () {
+        Route::get('', 'Admin\LotteryRewardController@list');
+        Route::patch('{id}', 'Admin\LotteryRewardController@updateStatus');
+    });
 });

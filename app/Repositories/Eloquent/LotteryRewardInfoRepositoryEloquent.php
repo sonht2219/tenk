@@ -7,7 +7,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\Contract\LotteryRewardInfoRepository;
 use App\Models\LotteryRewardInfo;
-use App\Validators\LotteryRewardInfoValidator;
 
 /**
  * Class LotteryRewardInfoRepositoryEloquent.
@@ -33,7 +32,7 @@ class LotteryRewardInfoRepositoryEloquent extends RepositoryEloquent implements 
      */
     public function boot()
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+//        $this->pushCriteria(app(RequestCriteria::class));
     }
 
     public function findByRewardId($reward_id)

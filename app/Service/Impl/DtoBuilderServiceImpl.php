@@ -13,6 +13,7 @@ use App\Helper\Constant;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
+use App\Models\LotteryRewardInfo;
 use App\Models\LotterySession;
 use App\Models\Product;
 use App\Models\UserAddress;
@@ -158,6 +159,8 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             $result['user'] = $this->buildUserDto($lottery_reward->user);
         if ($lottery_reward->relationLoaded('lottery') && $lottery_reward->lottery)
             $result['lottery'] = $this->buildLotteryDto($lottery_reward->lottery);
+        if ($lottery_reward->relationLoaded('info') && $lottery_reward->info)
+            $result['info'] = $this->buildLotteryRewardInfoDto($lottery_reward->info);
 
         return $result;
     }
@@ -221,6 +224,28 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             $result['province'] = $user_address->province;
         if ($user_address->relationLoaded('district') && $user_address->district)
             $result['district'] = $user_address->district;
+
+        return $result;
+    }
+
+    public function buildLotteryRewardInfoDto(LotteryRewardInfo $info)
+    {
+        $result = [
+            'id' => $info->id,
+            'reward_id' => $info->reward_id,
+            'name' => $info->name,
+            'phone_number' => $info->phone_number,
+            'address' => $info->address,
+            'province_id' => $info->province_id,
+            'district_id' => $info->district_id,
+            'created_at' => $info->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $info->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
+        ];
+
+        if ($info->relationLoaded('province') && $info->province)
+            $result['province'] = $info->province;
+        if ($info->relationLoaded('district') && $info->district)
+            $result['district'] = $info->district;
 
         return $result;
     }

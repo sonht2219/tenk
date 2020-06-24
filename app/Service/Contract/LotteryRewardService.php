@@ -16,4 +16,6 @@ interface LotteryRewardService
     public function listRewardOfProduct($product_id, $limit): LengthAwarePaginator;
     public function history(Request $req, User $user): LengthAwarePaginator;
     public function receiveReward(ReceiveRewardRequest $req, User $user);
+    public function list($limit, $user_id, $product_id, $status): LengthAwarePaginator;
+    public function updateRewardStatus($id, $status);
 }
