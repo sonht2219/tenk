@@ -15,5 +15,7 @@ interface LotteryService
     public function listLotteries($id, $search, $limit): LengthAwarePaginator;
     public function buyLotteries(BuyLotteryRequest $req);
     public function allLotteriesOfUserInLotterySession($session_id, $user_id);
+    public function getUnitPriceLottery();
+    public function countSoldLottery();
     public function getHistoryBuyLotteryOfSession($session_id, $user_id);
 }

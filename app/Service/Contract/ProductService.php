@@ -45,4 +45,6 @@ interface ProductService
      * @throws ModelNotFoundException
      */
     public function delete($id): Product;
+
+    public function countProductsByStatus($status);
 }
