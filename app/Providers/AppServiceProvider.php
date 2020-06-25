@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         FeedbackService::class => FeedBackServiceImpl::class,
         RegionService::class => RegionServiceImpl::class,
         UserAddressService::class => UserAddressServiceImpl::class,
+        UserService::class => UserAddressServiceImpl::class,
         FileService::class => FileServiceImpl::class,
         UserService::class => UserServiceImpl::class,
     ];

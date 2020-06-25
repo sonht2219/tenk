@@ -70,6 +70,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'name' => $user->name,
             'avatar' => $user->avatar,
             'avatar_url' => $user->avatar ? $this->fileService->uploaded_url($user->avatar) : $user->avatar,
+            'birthday' => $user->birthday ? $user->birthday->getTimestamp() * 1000 : null,
             'status' => $user->status,
             'created_at' => $user->created_at->format(Constant::GLOBAL_TIME_FORMAT),
             'updated_at' => $user->updated_at->format(Constant::GLOBAL_TIME_FORMAT)

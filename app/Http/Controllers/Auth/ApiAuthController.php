@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\AuthorizedController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Service\Contract\AuthService;
 use App\Service\Contract\DtoBuilderService;
@@ -44,5 +46,13 @@ class ApiAuthController extends Controller
             'user' => $this->dtoBuilder->buildUserDto($this->user()),
             'token' => $this->authService->generateToken($this->user())
         ];
+    }
+
+    public function changePassword(ChangePasswordRequest $req) {
+        return $this->dtoBuilder->buildUserDto($this->authService->changePassword($req, $this->user()));
+    }
+
+    public function forgetPassword(ForgetPasswordRequest $req) {
+        return $this->authService->forgetPassword($req, $this->user());
     }
 }
