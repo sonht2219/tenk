@@ -90,9 +90,11 @@ class AuthServiceImpl implements AuthService
     public function forgetPassword(ForgetPasswordRequest $req)
     {
         $response = $this->password_broker->sendResetLink($req->only('email'));
-        if ($response != Password::RESET_LINK_SENT)
-            throw new ExecuteException(__('Đã xảy ra lỗi. Vui lòng thử lại sau'));
-
-        return null;
+        if ($response == Password::RESET_LINK_SENT)
+            return ['data' => null];
+        elseif ($response == Password::INVALID_USER)
+            throw new ExecuteException(__('Email chưa được đăng ký'));
+        else
+            throw new ExecuteException(__('Đã xảy ra lỗi. Vui lòng thử lại sau.'));
     }
 }
