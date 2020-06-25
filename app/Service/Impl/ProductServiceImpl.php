@@ -91,4 +91,12 @@ class ProductServiceImpl implements ProductService
         $product->status = CommonStatus::INACTIVE;
         return $this->productRepo->save($product);
     }
+
+    public function countProductsByStatus($status)
+    {
+        if ($status)
+            $this->productRepo->pushCriteria(new HasStatusCriteria($status));
+
+        return $this->productRepo->count();
+    }
 }

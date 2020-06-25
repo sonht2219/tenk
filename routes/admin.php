@@ -15,4 +15,11 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('', 'Admin\LotteryRewardController@list');
         Route::patch('{id}', 'Admin\LotteryRewardController@updateStatus');
     });
+
+    Route::group(['prefix' => 'statistics'], function () {
+        Route::get('users-count', 'Admin\DashboardController@usersCount');
+        Route::get('products-count', 'Admin\DashboardController@productsCount');
+        Route::get('lotteries-count', 'Admin\DashboardController@lotteriesCount');
+        Route::get('sessions-count', 'Admin\DashboardController@sessionsCount');
+    });
 });

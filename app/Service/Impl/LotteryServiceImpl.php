@@ -17,6 +17,7 @@ use App\Queue\Jobs\CalculateRewardForLotterySession;
 use App\Repositories\Contract\LotteryRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
+use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Lottery\LotteryHasLotterySessionIdCriteria;
 use App\Repositories\Criteria\Lottery\LotterySearchCriteria;
 use App\Service\Contract\LotteryService;
@@ -160,6 +161,12 @@ class LotteryServiceImpl implements LotteryService
 
     public function getTimeCountDown() {
         return 3 * 60 * 1000;
+    }
+
+    public function countSoldLottery()
+    {
+        $this->lotteryRepo->pushCriteria(new HasStatusCriteria(LotteryStatus::SOLD));
+        return $this->lotteryRepo->count();
     }
 
 }
