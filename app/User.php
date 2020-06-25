@@ -43,6 +43,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @property-read \App\Models\Wallet|null $wallet
+ * @property \Illuminate\Support\Carbon|null $birthday
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBirthday($value)
  */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
@@ -55,7 +57,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'phone_number', 'password', 'email', 'avatar', 'social_id', 'status'
+        'id', 'name', 'phone_number', 'password', 'email', 'avatar', 'social_id', 'status', 'birthday'
     ];
 
     /**

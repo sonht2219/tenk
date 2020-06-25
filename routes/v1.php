@@ -49,5 +49,5 @@ Route::group(['prefix' => 'user-addresses', 'middleware' => 'auth:jwt'], functio
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth:jwt'], function () {
     Route::get('wallet', 'Api\UserController@wallet');
-    Route::put('update-profile', 'Api\UserController@updateProfile');
+    Route::post('update-profile', 'Api\UserController@updateProfile');
 });

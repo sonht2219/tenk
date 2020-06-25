@@ -16,6 +16,7 @@ use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Service\Contract\FileService;
 use App\Service\Contract\UserService;
 use App\User;
+use Carbon\Carbon;
 
 class UserServiceImpl implements UserService
 {
@@ -41,13 +42,15 @@ class UserServiceImpl implements UserService
         $data = $this->filterDataUpdateProfile($req);
         if (isset($data['avatar_file']))
             $data['avatar'] = $this->fileService->storeFile($data['avatar_file'], UploadFolder::AVATARS);
+        if (isset($data['birthday']))
+            $data['birthday'] = Carbon::createFromTimestampMs($data['birthday']);
 
         $user->fill($data);
         return $this->userRepo->save($user);
     }
 
     public function filterDataUpdateProfile(UpdateProfileUserRequest $req) {
-        $fillable = ['email', 'name', 'avatar_file'];
+        $fillable = ['name', 'birthday', 'avatar_file'];
         return array_filter(filter_data($req->all()), fn ($key) => in_array($key, $fillable), ARRAY_FILTER_USE_KEY);
     }
 
