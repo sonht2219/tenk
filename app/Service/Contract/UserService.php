@@ -13,4 +13,5 @@ interface UserService
 {
     public function wallet(User $user);
     public function updateProfile(UpdateProfileUserRequest $req, User $user);
+    public function countByStatus($status);
 }

@@ -20,5 +20,6 @@ interface LotterySessionService
     public function list($limit, $search, $status = LotterySessionStatus::SELLING): LengthAwarePaginator;
     public function listSessionOpeningAndEnded($limit): LengthAwarePaginator;
     public function historyMine(Request $req, User $user): LengthAwarePaginator;
+    public function countByStatus($status);
     public function userJoinedSession($session_id, $user_id): bool;
 }

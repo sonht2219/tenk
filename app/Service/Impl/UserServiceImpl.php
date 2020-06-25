@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateProfileUserRequest;
 use App\Repositories\Contract\UserRepository;
 use App\Repositories\Contract\WalletRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
+use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Service\Contract\FileService;
 use App\Service\Contract\UserService;
 use App\User;
@@ -48,5 +49,13 @@ class UserServiceImpl implements UserService
     public function filterDataUpdateProfile(UpdateProfileUserRequest $req) {
         $fillable = ['email', 'name', 'avatar_file'];
         return array_filter(filter_data($req->all()), fn ($key) => in_array($key, $fillable), ARRAY_FILTER_USE_KEY);
+    }
+
+    public function countByStatus($status)
+    {
+        if (is_numeric($status))
+            $this->userRepo->pushCriteria(new HasStatusCriteria($status));
+
+        return $this->userRepo->count();
     }
 }

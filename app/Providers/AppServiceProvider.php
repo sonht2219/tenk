@@ -21,6 +21,7 @@ use App\Service\Impl\LotteryServiceImpl;
 use App\Service\Impl\LotterySessionServiceImpl;
 use App\Service\Impl\ProductServiceImpl;
 use App\Service\Impl\UserAddressServiceImpl;
+use App\Service\Impl\UserServiceImpl;
 use App\Services\Contract\RegionService;
 use App\Services\Impl\RegionServiceImpl;
 use Illuminate\Support\ServiceProvider;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         UserAddressService::class => UserAddressServiceImpl::class,
         UserService::class => UserAddressServiceImpl::class,
         FileService::class => FileServiceImpl::class,
+        UserService::class => UserServiceImpl::class,
     ];
     /**
      * Register any application services.
