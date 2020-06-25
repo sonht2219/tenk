@@ -23,8 +23,7 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'web-views'], function () {
-   Route::get('guide-join', function () {
-       return view('web-views.guide-join');
-   });
+   Route::view('guide-join', 'web-views.guide-join');
+   Route::view('payment', 'web-views.payment');
 });
 Route::get('/home', 'HomeController@index')->name('home');
