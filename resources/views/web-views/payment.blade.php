@@ -14,6 +14,17 @@
             margin: 0;
             font-family: 'Nunito', sans-serif;
         }
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
         .content {
             padding: 0;
         }
@@ -94,7 +105,7 @@
 
     <div class="amount">
         <p class="label">Số tiền nạp: </p>
-        <input type="text" placeholder="Nhập số tiền">
+        <input type="number" placeholder="Nhập số tiền">
     </div>
 
     <div class="title-method">Hình Thức Thanh Toán</div>
