@@ -26,5 +26,6 @@ Route::group(['prefix' => 'web-views'], function () {
    Route::get('guide-join', function () {
        return view('web-views.guide-join');
    });
+   Route::get('articles/{slug}', 'Share\WebViewController@article')->name('article_webview');
 });
 Route::get('/home', 'HomeController@index')->name('home');

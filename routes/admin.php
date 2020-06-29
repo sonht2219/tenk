@@ -22,4 +22,12 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('lotteries-count', 'Admin\DashboardController@lotteriesCount');
         Route::get('sessions-count', 'Admin\DashboardController@sessionsCount');
     });
+
+    Route::group(['prefix' => 'articles'], function () {
+        Route::post('', 'Admin\ArticleController@create');
+        Route::get('', 'Admin\ArticleController@list');
+        Route::get('{id}', 'Admin\ArticleController@single');
+        Route::put('{id}', 'Admin\ArticleController@edit');
+        Route::delete('{id}', 'Admin\ArticleController@delete');
+    });
 });

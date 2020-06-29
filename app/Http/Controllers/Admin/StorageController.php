@@ -25,7 +25,8 @@ class StorageController extends Controller
 
         return [
             'path' => $path,
-            'url' => $this->fileService->uploaded_url($path)
+            'url' => $this->fileService->uploaded_url($path),
+            'full_path' => $this->fileService->full_path($path),
         ];
     }
 }
