@@ -10,6 +10,7 @@ use App\Enum\Status\LotteryStatus;
 use App\Enum\Status\RewardStatus;
 use App\Enum\Type\UserAddressType;
 use App\Helper\Constant;
+use App\Models\Article;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
@@ -249,5 +250,26 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             $result['district'] = $info->district;
 
         return $result;
+    }
+
+    public function buildArticleDto(Article $article)
+    {
+        return [
+            'id' => $article->id,
+            'slug' => $article->slug,
+            'title' => $article->title,
+            'description' => $article->description,
+            'content' => $article->content,
+            'author' => $article->author,
+            'thumbnail' => $article->thumbnail,
+            'thumbnail_url' => $this->fileService->uploaded_url($article->thumbnail),
+            'status' => $article->status,
+            'status_title' => CommonStatus::getDescription($article->status),
+            'seen' => $article->seen,
+            'created_at' => $article->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $article->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'created_by_id' => $article->created_by_id,
+            'link' => route('article_webview', ['slug' => $article->slug]),
+        ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Service\Contract\ArticleService;
 use App\Service\Contract\AuthService;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FeedbackService;
@@ -12,6 +13,7 @@ use App\Service\Contract\LotterySessionService;
 use App\Service\Contract\ProductService;
 use App\Service\Contract\UserAddressService;
 use App\Service\Contract\UserService;
+use App\Service\Impl\ArticleServiceImpl;
 use App\Service\Impl\AuthServiceImpl;
 use App\Service\Impl\DtoBuilderServiceImpl;
 use App\Service\Impl\FeedBackServiceImpl;
@@ -38,9 +40,9 @@ class AppServiceProvider extends ServiceProvider
         FeedbackService::class => FeedBackServiceImpl::class,
         RegionService::class => RegionServiceImpl::class,
         UserAddressService::class => UserAddressServiceImpl::class,
-        UserService::class => UserAddressServiceImpl::class,
         FileService::class => FileServiceImpl::class,
         UserService::class => UserServiceImpl::class,
+        ArticleService::class => ArticleServiceImpl::class,
     ];
     /**
      * Register any application services.
