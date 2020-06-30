@@ -1,0 +1,112 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+.content {
+    padding: 0;
+}
+.title {
+    font-size: 16px;
+    text-transform: uppercase;
+    text-align: center;
+    background-color: #FF9800;
+    padding: 10px;
+    color: #fff0ff;
+}
+.amount {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /*padding-bottom: 20px;*/
+    /*border-bottom: 1px solid #c0c5ce;*/
+}
+.amount input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 9px 15px;
+    width: 50%;
+}
+.amount p {
+    font-weight: 600;
+}
+.title-method {
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 20px 10px 0 10px;
+}
+.wrap-method {
+    padding: 10px 15px;
+}
+.method {
+    border: 1px solid #c0c5ce;
+    border-radius: 5px;
+    margin: 10px 0;
+    position: relative;
+    height: 45px;
+}
+.selected {
+    border: 2px solid #FF9800 !important;
+}
+.method img {
+    width: 35px;
+    padding: 5px;
+    position: absolute;
+    top: 10%;
+}
+.method span {
+    position: absolute;
+    top: 28%;
+    height: 30px;
+    left: 50px;
+}
+.btn-deposit {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    text-align: center;
+}
+.btn-deposit button {
+    text-transform: uppercase;
+    padding: 10px 0;
+    background-color: #FF9800;
+    border: 1px solid #FF9800;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #fff0ff;
+}
+.btn-deposit .btn-method {
+    width: 95%;
+}
+.btn-deposit .btn-payment {
+    width: 47%;
+}
+.disabled {
+    background-color: #c0c5ce !important;
+    border: 1px solid #c0c5ce !important;
+}
+.note span {
+    display: block;
+    border-bottom: 1px solid #c0c5ce45;
+    padding: 10px 20px;
+}
+
+.wrap-result {
+    height: 100vh;
+    position: relative;
+}
+
+.wrap-result-content {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+}

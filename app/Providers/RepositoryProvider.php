@@ -15,6 +15,7 @@ use App\Repositories\Contract\LotteryRewardRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Contract\ProductRepository;
 use App\Repositories\Contract\ProvinceRepository;
+use App\Repositories\Contract\TransactionRepository;
 use App\Repositories\Contract\UserAddressRepository;
 use App\Repositories\Contract\UserRepository;
 use App\Repositories\Contract\WalletLogRepository;
@@ -30,6 +31,7 @@ use App\Repositories\Eloquent\LotteryRewardRepositoryEloquent;
 use App\Repositories\Eloquent\LotterySessionRepositoryEloquent;
 use App\Repositories\Eloquent\ProductRepositoryEloquent;
 use App\Repositories\Eloquent\ProvinceRepositoryEloquent;
+use App\Repositories\Eloquent\TransactionRepositoryEloquent;
 use App\Repositories\Eloquent\UserAddressRepositoryEloquent;
 use App\Repositories\Eloquent\UserRepositoryEloquent;
 use App\Repositories\Eloquent\WalletLogRepositoryEloquent;
@@ -51,6 +53,7 @@ class RepositoryProvider  extends ServiceProvider
         ProvinceRepository::class => ProvinceRepositoryEloquent::class,
         UserAddressRepository::class => UserAddressRepositoryEloquent::class,
         LotteryRewardInfoRepository::class => LotteryRewardInfoRepositoryEloquent::class,
+        TransactionRepository::class => TransactionRepositoryEloquent::class,
         ArticleRepository::class => ArticleRepositoryEloquent::class,
         BannerRepository::class => BannerRepositoryEloquent::class,
         BannerTypeRepository::class => BannerTypeRepositoryEloquent::class,

@@ -9,11 +9,12 @@ use App\Models\Wallet;
 use App\Models\WalletLog;
 use App\Repositories\Contract\WalletLogRepository;
 use App\Repositories\Contract\WalletRepository;
+use App\Repositories\Criteria\Common\BelongToUserCriteria;
 use App\User;
 
 trait CanUseWallet
 {
-    private bool $is_initialize = false;
+    private bool $is_initialize_can_use_wallet = false;
     private WalletRepository $walletRepo;
     private WalletLogRepository $logRepo;
 
@@ -43,10 +44,10 @@ trait CanUseWallet
 
     private function initialize()
     {
-        if (!$this->is_initialize) {
+        if (!$this->is_initialize_can_use_wallet) {
             $this->walletRepo = app(WalletRepository::class);
             $this->logRepo = app(WalletLogRepository::class);
-            $this->is_initialize = true;
+            $this->is_initialize_can_use_wallet = true;
         }
     }
 
@@ -76,5 +77,11 @@ trait CanUseWallet
         $this->walletRepo->save($wallet);
 
         return $log;
+    }
+
+    protected function getWalletUser(User $user): Wallet {
+        $this->initialize();
+        $this->walletRepo->pushCriteria(new BelongToUserCriteria($user->id));
+        return $this->walletRepo->firstOrFail();
     }
 }

@@ -13,6 +13,7 @@ use App\Service\Contract\LotteryRewardService;
 use App\Service\Contract\LotteryService;
 use App\Service\Contract\LotterySessionService;
 use App\Service\Contract\ProductService;
+use App\Service\Contract\TransactionService;
 use App\Service\Contract\UserAddressService;
 use App\Service\Contract\UserService;
 use App\Service\Impl\ArticleServiceImpl;
@@ -26,6 +27,7 @@ use App\Service\Impl\LotteryRewardServiceImpl;
 use App\Service\Impl\LotteryServiceImpl;
 use App\Service\Impl\LotterySessionServiceImpl;
 use App\Service\Impl\ProductServiceImpl;
+use App\Service\Impl\TransactionServiceImpl;
 use App\Service\Impl\UserAddressServiceImpl;
 use App\Service\Impl\UserServiceImpl;
 use App\Services\Contract\RegionService;
@@ -44,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
         FeedbackService::class => FeedBackServiceImpl::class,
         RegionService::class => RegionServiceImpl::class,
         UserAddressService::class => UserAddressServiceImpl::class,
+        TransactionService::class => TransactionServiceImpl::class,
         FileService::class => FileServiceImpl::class,
         UserService::class => UserServiceImpl::class,
         ArticleService::class => ArticleServiceImpl::class,
