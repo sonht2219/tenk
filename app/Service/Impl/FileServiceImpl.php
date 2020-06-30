@@ -118,6 +118,11 @@ class FileServiceImpl implements FileService
         return url($this->upload_path . $path);
     }
 
+    public function full_path($path = '')
+    {
+        return '/' . $this->upload_path . $path;
+    }
+
     public function compressImageKeepRatio($path, $new_width = 400)
     {
         $new_path = $this->generatePathFromOldPath($path);

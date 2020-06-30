@@ -51,3 +51,13 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth:jwt'], function () {
     Route::get('wallet', 'Api\UserController@wallet');
     Route::post('update-profile', 'Api\UserController@updateProfile');
 });
+
+Route::group(['prefix' => 'transactions', 'middleware' => 'auth:jwt'], function () {
+    Route::get('bank-account', 'Api\TransactionController@bankAccount');
+    Route::post('deposit-cash', 'Api\TransactionController@depositCash')->middleware('transaction');
+});
+
+
+Route::group(['prefix' => 'banners'], function () {
+    Route::get('', 'Share\BannerController@list');
+});

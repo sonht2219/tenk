@@ -61,6 +61,12 @@ interface FileService
 
     /**
      * @param string $path
+     * @return string
+     */
+    public function full_path($path = '');
+
+    /**
+     * @param string $path
      * @param int $new_width
      * @return string
      */

@@ -8,14 +8,18 @@ use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Enum\Status\RewardStatus;
+use App\Enum\Status\TransactionStatus;
 use App\Enum\Type\UserAddressType;
 use App\Helper\Constant;
+use App\Models\Article;
+use App\Models\Banner;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
 use App\Models\LotteryRewardInfo;
 use App\Models\LotterySession;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\UserAddress;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FileService;
@@ -249,5 +253,65 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             $result['district'] = $info->district;
 
         return $result;
+    }
+
+    public function buildTransactionDto(Transaction $transaction)
+    {
+        $result = [
+            'id' => $transaction->id,
+            'value' => $transaction->value,
+            'old_cash' => $transaction->old_cash,
+            'new_cash' => $transaction->new_cash,
+            'user_id' => $transaction->user_id,
+            'description' => $transaction->description,
+            'status' => $transaction->status,
+            'status_title' => TransactionStatus::getDescription($transaction->status),
+            'transaction_cash_detail' => null,
+            'created_at' => $transaction->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $transaction->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
+        ];
+
+        if ($transaction->relationLoaded('cash_detail') && $transaction->cash_detail)
+            $result['transaction_cash_detail'] = $transaction->cash_detail;
+
+        return $result;
+    }
+
+    public function buildArticleDto(Article $article)
+    {
+        return [
+            'id' => $article->id,
+            'slug' => $article->slug,
+            'title' => $article->title,
+            'description' => $article->description,
+            'content' => $article->content,
+            'author' => $article->author,
+            'thumbnail' => $article->thumbnail,
+            'thumbnail_url' => $this->fileService->uploaded_url($article->thumbnail),
+            'status' => $article->status,
+            'status_title' => CommonStatus::getDescription($article->status),
+            'seen' => $article->seen,
+            'created_at' => $article->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $article->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'created_by_id' => $article->created_by_id,
+            'link' => route('article_webview', ['slug' => $article->slug]),
+        ];
+    }
+
+    public function buildBannerDto(Banner $banner)
+    {
+        return [
+            'id' => $banner->id,
+            'title' => $banner->title,
+            'banner_type_id' => $banner->banner_type_id,
+            'navigate_to' => $banner->navigate_to,
+            'image' => $banner->image,
+            'image_url' => $this->fileService->uploaded_url($banner->image),
+            'created_at' => $banner->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $banner->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'status' => $banner->status,
+            'status_title' => CommonStatus::getDescription($banner->status),
+            'ordinal_number' => $banner->ordinal_number,
+        ];
     }
 }

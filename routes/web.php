@@ -23,8 +23,9 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'web-views'], function () {
-   Route::get('guide-join', function () {
-       return view('web-views.guide-join');
-   });
+    Route::view('vue/{any}', 'layouts.vue')->where('any', '.*');
+    Route::view('guide-join', 'web-views.guide-join');
+    Route::view('payment', 'web-views.payment');
+    Route::get('articles/{slug}', 'Share\WebViewController@article')->name('article_webview');
 });
 Route::get('/home', 'HomeController@index')->name('home');

@@ -147,7 +147,8 @@ return [
         'bank_branch' => 'Chi nhánh ngân hàng',
         'from_mls' => 'Thời gian bắt đầu',
         'to_mls' => 'Thời gian kết thúc',
-        'reason' => 'Lý do'
+        'reason' => 'Lý do',
+        'value_original' => 'Số tiền nạp'
     ],
 
 ];

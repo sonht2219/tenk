@@ -22,4 +22,28 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('lotteries-count', 'Admin\DashboardController@lotteriesCount');
         Route::get('sessions-count', 'Admin\DashboardController@sessionsCount');
     });
+
+    Route::group(['prefix' => 'articles'], function () {
+        Route::post('', 'Admin\ArticleController@create');
+        Route::get('', 'Admin\ArticleController@list');
+        Route::get('{id}', 'Admin\ArticleController@single');
+        Route::put('{id}', 'Admin\ArticleController@edit');
+        Route::delete('{id}', 'Admin\ArticleController@delete');
+    });
+
+    Route::group(['prefix' => 'banner-types'], function () {
+        Route::post('', 'Admin\BannerTypeController@create');
+        Route::get('', 'Admin\BannerTypeController@list');
+        Route::get('{id}', 'Admin\BannerTypeController@single');
+        Route::put('{id}', 'Admin\BannerTypeController@edit');
+        Route::delete('{id}', 'Admin\BannerTypeController@delete');
+    });
+
+    Route::group(['prefix' => 'banners'], function () {
+        Route::post('', 'Admin\BannerController@create');
+        Route::get('', 'Share\BannerController@list');
+        Route::get('{id}', 'Admin\BannerController@single');
+        Route::put('{id}', 'Admin\BannerController@edit');
+        Route::delete('{id}', 'Admin\BannerController@delete');
+    });
 });
