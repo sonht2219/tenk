@@ -53,5 +53,6 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth:jwt'], function () {
 });
 
 Route::group(['prefix' => 'transactions', 'middleware' => 'auth:jwt'], function () {
-    Route::post('deposit-cash', 'Api\TransactionController@depositCash');
+    Route::get('bank-account', 'Api\TransactionController@bankAccount');
+    Route::post('deposit-cash', 'Api\TransactionController@depositCash')->middleware('transaction');
 });

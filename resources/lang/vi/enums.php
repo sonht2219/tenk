@@ -1,9 +1,11 @@
 <?php
 
+use App\Enum\DepositChannel;
 use App\Enum\Status\CommonStatus;
 use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Enum\Status\RewardStatus;
+use App\Enum\Status\TransactionStatus;
 use App\Enum\Type\UserAddressType;
 
 
@@ -68,6 +70,16 @@ return [
         RewardStatus::SHIPPING => 'Đang vận chuyển',
         RewardStatus::DONE => 'Đã nhận',
         RewardStatus::REJECTED => 'Đã hủy'
+    ],
+    TransactionStatus::class => [
+        TransactionStatus::PENDING => 'Chờ xử lý',
+        TransactionStatus::SUCCESS => 'Hoàn thành',
+        TransactionStatus::REJECT => 'Đã hủy'
+    ],
+    DepositChannel::class => [
+        DepositChannel::MOMO => 'MOMO',
+        DepositChannel::PHONE_CARD => 'Thẻ cào',
+        DepositChannel::TRANSFER_BANK => 'Chuyển khoản'
     ]
 //    CommentTargetType::class => [
 //        CommentTargetType::PRODUCT => 'Sản phẩm'

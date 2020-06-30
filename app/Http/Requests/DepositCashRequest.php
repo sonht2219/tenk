@@ -13,7 +13,8 @@ use Illuminate\Validation\Rule;
  * @package App\Http\Requests
  *
  * @property-read $payment_method
- * @property-read $amount
+ * @property-read $value_original
+ * @property-read $success
  */
 class DepositCashRequest extends ValidatedRequest
 {
@@ -25,7 +26,8 @@ class DepositCashRequest extends ValidatedRequest
     {
         return [
             'payment_method' => ['required', 'numeric', Rule::in(DepositChannel::getValues())],
-            'amount' => ['required', 'numeric', 'min:10000']
+            'value_original' => ['required', 'numeric', 'min:10000'],
+            'success' => ['nullable', 'numeric']
         ];
     }
 }

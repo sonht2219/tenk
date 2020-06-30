@@ -16,8 +16,9 @@ class CreateTransactionCashDetailsTable extends Migration
     {
         Schema::create('transaction_cash_details', function (Blueprint $table) {
             $table->string('transaction_id')->primary();
-            $table->bigInteger('price');
-            $table->tinyInteger('deposit_channel')->comment(generate_db_comment(DepositChannel::getInstances()));
+            $table->bigInteger('value_original');
+            $table->tinyInteger('deposit_channel')
+                ->comment(generate_db_comment(DepositChannel::getInstances()));
         });
     }
 

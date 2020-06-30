@@ -4,14 +4,15 @@
 namespace App\Strategies\Payment\Base;
 
 
+use App\Http\Requests\DepositCashRequest;
 use App\User;
 
 interface PaymentStrategy
 {
     /**
-     * @param $data
+     * @param DepositCashRequest $req
      * @param User $user
      * @return mixed
      */
-    public function handle($data, User $user);
+    public function handle(DepositCashRequest $req, User $user);
 }

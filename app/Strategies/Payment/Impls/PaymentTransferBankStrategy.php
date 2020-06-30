@@ -3,25 +3,28 @@
 
 namespace App\Strategies\Payment\Impls;
 
-
-use App\Repositories\Contract\TransactionRepository;
+use App\Enum\DepositChannel;
+use App\Enum\Status\TransactionStatus;
+use App\Models\Transaction;
+use App\Service\Traits\TransactionTrait;
 use App\Strategies\Payment\Base\PaymentStrategy;
 use App\User;
 
 class PaymentTransferBankStrategy implements PaymentStrategy
 {
-    private TransactionRepository $transactionRepo;
-
-    public function __construct(TransactionRepository $transactionRepo)
-    {
-
-        $this->transactionRepo = $transactionRepo;
-    }
-
+    use TransactionTrait;
     /**
      * @inheritDoc
      */
-    public function handle($data, User $user)
+    public function handle($req, User $user)
     {
+        $status = $req->success ? TransactionStatus::SUCCESS : TransactionStatus::PENDING;
+        $value_original = $req->value_original;
+        $value = $value_original/config('payment.exchange_rate');
+        /** @var Transaction $transaction */
+        $transaction = $this->createTransaction($user, $value, $value_original, DepositChannel::TRANSFER_BANK, null, $status);
+        if ($status == TransactionStatus::SUCCESS)
+            $this->changeCashOfUser($user, $value, 'Cộng tiền từ giao dịch ' . $transaction->id, 'transactions', $transaction->id);
+        return $transaction;
     }
 }

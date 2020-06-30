@@ -20,20 +20,11 @@ class TransactionRepositoryEloquent extends RepositoryEloquent implements Transa
         return Transaction::class;
     }
 
-    public function createTransaction($data, $deposit_channel = null)
+    public function findByIdWithRelation($id, $relations = [])
     {
-        /** @var Transaction $transaction */
-        $transaction = $this->model->newQuery()
-            ->create($data);
-
-        if ($deposit_channel) {
-            /** @var TransactionCashDetail $transaction_cash_detail */
-            $transaction_cash_detail = new TransactionCashDetail();
-            $transaction_cash_detail->transaction_id = $transaction->id;
-            $transaction_cash_detail->value = $data->value;
-            $transaction_cash_detail->deposit_channel = $deposit_channel;
-            $transaction_cash_detail->save();
-        }
-        return $transaction;
+        return $this->model->newQuery()
+            ->where('id', $id)
+            ->with($relations)
+            ->firstOrFail();
     }
 }

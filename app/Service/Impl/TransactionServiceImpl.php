@@ -19,15 +19,20 @@ class TransactionServiceImpl implements TransactionService
         $this->transactionRepo = $transactionRepo;
     }
 
-    public function createTransaction($data, $channel = null)
-    {
-
-    }
-
     public function depositCash(DepositCashRequest $req, User $user)
     {
         /** @var PaymentStrategy $payment_strategy */
-        $payment_strategy = app()->make(config('payment.' . $req->payment_method));
-        return $payment_strategy->handle($req->filteredData(), $user);
+        $payment_strategy = app()->make(config('payment.method.' . $req->payment_method));
+        return $payment_strategy->handle($req, $user);
+    }
+
+    public function bankAccount()
+    {
+        return [
+            'bank_id' => '1903678999999',
+            'owner_name' => 'Công ty TNHH Tenk Việt Nam',
+            'bank_name' => 'Ngân hàng Techcombank',
+            'bank_branch' => 'Trụ sở'
+        ];
     }
 }

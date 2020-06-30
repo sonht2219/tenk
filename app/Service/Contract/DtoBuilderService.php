@@ -9,6 +9,7 @@ use App\Models\Lottery;
 use App\Models\LotteryReward;
 use App\Models\LotterySession;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\UserAddress;
 use App\User;
 
@@ -22,4 +23,5 @@ interface DtoBuilderService
     public function buildLotteryRewardDto(LotteryReward $lottery_reward);
     public function buildFeedbackDto(Feedback $feedback);
     public function buildUserAddressDto(UserAddress $user_address);
+    public function buildTransactionDto(Transaction $transaction);
 }
