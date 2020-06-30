@@ -47,6 +47,10 @@
                 this.currentStep--;
             },
             confirmDeposit() {
+                if (this.amount <= 0) {
+                    alert('Nhập số tiền');
+                    return;
+                }
                 const data = {
                     payment_method: this.methodSelected.id,
                     value_original: this.amount,

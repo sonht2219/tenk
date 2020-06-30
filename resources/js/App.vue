@@ -14,7 +14,8 @@
         },
         methods: {
             requiredAuth() {
-                alert('Bạn chưa đăng nhập. Vui lòng đăng nhập để sử dụng tính năng này');
+                localStorage.removeItem('authorization');
+                this.$router.push({ name: 'notfound' });
             }
         },
         beforeDestroy() {

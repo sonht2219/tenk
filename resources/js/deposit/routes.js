@@ -7,12 +7,15 @@ const depositRoutes = [
     {
         path: '/web-views/vue/deposit',
         component: Deposit,
-        name: 'deposit'
+        name: 'deposit',
+        meta: {
+            auth: true
+        }
     },
     {
         path: '/web-views/vue/deposit/success',
         component: Success,
-        name: 'success'
+        name: 'success',
     },
     {
         path: '/web-views/vue/deposit/fail',
@@ -22,7 +25,10 @@ const depositRoutes = [
     {
         path: '/web-views/vue/deposit/bank-account',
         component: BankAccount,
-        name: 'bankAccount'
+        name: 'bankAccount',
+        meta: {
+            auth: true
+        }
     }
 ];
 
