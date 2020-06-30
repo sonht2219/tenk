@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Service\Contract\ArticleService;
 use App\Service\Contract\AuthService;
+use App\Service\Contract\BannerService;
+use App\Service\Contract\BannerTypeService;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FeedbackService;
 use App\Service\Contract\FileService;
@@ -13,7 +16,10 @@ use App\Service\Contract\ProductService;
 use App\Service\Contract\TransactionService;
 use App\Service\Contract\UserAddressService;
 use App\Service\Contract\UserService;
+use App\Service\Impl\ArticleServiceImpl;
 use App\Service\Impl\AuthServiceImpl;
+use App\Service\Impl\BannerServiceImpl;
+use App\Service\Impl\BannerTypeServiceImpl;
 use App\Service\Impl\DtoBuilderServiceImpl;
 use App\Service\Impl\FeedBackServiceImpl;
 use App\Service\Impl\FileServiceImpl;
@@ -40,9 +46,12 @@ class AppServiceProvider extends ServiceProvider
         FeedbackService::class => FeedBackServiceImpl::class,
         RegionService::class => RegionServiceImpl::class,
         UserAddressService::class => UserAddressServiceImpl::class,
-        UserService::class => UserService::class,
         TransactionService::class => TransactionServiceImpl::class,
         FileService::class => FileServiceImpl::class,
+        UserService::class => UserServiceImpl::class,
+        ArticleService::class => ArticleServiceImpl::class,
+        BannerService::class => BannerServiceImpl::class,
+        BannerTypeService::class => BannerTypeServiceImpl::class,
     ];
     /**
      * Register any application services.

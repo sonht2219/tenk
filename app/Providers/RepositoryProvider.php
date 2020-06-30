@@ -4,6 +4,9 @@
 namespace App\Providers;
 
 
+use App\Repositories\Contract\ArticleRepository;
+use App\Repositories\Contract\BannerRepository;
+use App\Repositories\Contract\BannerTypeRepository;
 use App\Repositories\Contract\DistrictRepository;
 use App\Repositories\Contract\FeedbackRepository;
 use App\Repositories\Contract\LotteryRepository;
@@ -17,6 +20,9 @@ use App\Repositories\Contract\UserAddressRepository;
 use App\Repositories\Contract\UserRepository;
 use App\Repositories\Contract\WalletLogRepository;
 use App\Repositories\Contract\WalletRepository;
+use App\Repositories\Eloquent\ArticleRepositoryEloquent;
+use App\Repositories\Eloquent\BannerRepositoryEloquent;
+use App\Repositories\Eloquent\BannerTypeRepositoryEloquent;
 use App\Repositories\Eloquent\DistrictRepositoryEloquent;
 use App\Repositories\Eloquent\FeedbackRepositoryEloquent;
 use App\Repositories\Eloquent\LotteryRepositoryEloquent;
@@ -48,5 +54,8 @@ class RepositoryProvider  extends ServiceProvider
         UserAddressRepository::class => UserAddressRepositoryEloquent::class,
         LotteryRewardInfoRepository::class => LotteryRewardInfoRepositoryEloquent::class,
         TransactionRepository::class => TransactionRepositoryEloquent::class,
+        ArticleRepository::class => ArticleRepositoryEloquent::class,
+        BannerRepository::class => BannerRepositoryEloquent::class,
+        BannerTypeRepository::class => BannerTypeRepositoryEloquent::class,
     ];
 }
