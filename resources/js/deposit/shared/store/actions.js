@@ -1,0 +1,2 @@
+export const CHOOSE_METHOD = 'CHOOSE_METHOD';
+export const UPDATE_AMOUNT = 'UPDATE_AMOUNT';
