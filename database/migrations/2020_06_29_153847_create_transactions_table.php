@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\Status\TransactionStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,8 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('new_cash');
             $table->string('user_id', 20)->index();
             $table->text('description')->nullable();
-            $table->tinyInteger('status')->default(2);
+            $table->tinyInteger('status')->default(TransactionStatus::PENDING)
+                ->comment(generate_db_comment(TransactionStatus::getInstances()));
             $table->timestamps();
         });
     }
