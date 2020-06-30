@@ -11,6 +11,7 @@ use App\Enum\Status\RewardStatus;
 use App\Enum\Type\UserAddressType;
 use App\Helper\Constant;
 use App\Models\Article;
+use App\Models\Banner;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
@@ -270,6 +271,23 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'updated_at' => $article->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
             'created_by_id' => $article->created_by_id,
             'link' => route('article_webview', ['slug' => $article->slug]),
+        ];
+    }
+
+    public function buildBannerDto(Banner $banner)
+    {
+        return [
+            'id' => $banner->id,
+            'title' => $banner->title,
+            'banner_type_id' => $banner->banner_type_id,
+            'navigate_to' => $banner->navigate_to,
+            'image' => $banner->image,
+            'image_url' => $this->fileService->uploaded_url($banner->image),
+            'created_at' => $banner->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $banner->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'status' => $banner->status,
+            'status_title' => CommonStatus::getDescription($banner->status),
+            'ordinal_number' => $banner->ordinal_number,
         ];
     }
 }
