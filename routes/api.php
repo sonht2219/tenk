@@ -31,7 +31,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'Auth\ApiAuthController@register');
     Route::post('forget-password', 'Auth\ApiAuthController@forgetPassword');
     Route::group(['middleware' => 'auth:jwt'], function () {
-        Route::get('user-data', 'Auth\ApiAuthController@userData');
+        Route::get('user-data', 'Auth\ApiAuthController@userData')->middleware('notify_token');
         Route::post('change-password', 'Auth\ApiAuthController@changePassword');
     });
 });
