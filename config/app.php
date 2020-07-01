@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        \HoangDo\Notification\Provider\NotificationServiceProvider::class,
         /*
          * Application Service Providers...
          */
