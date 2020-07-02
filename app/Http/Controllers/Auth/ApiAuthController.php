@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Helper\Constant;
 use App\Http\Controllers\AuthorizedController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
@@ -12,6 +13,8 @@ use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Service\Contract\AuthService;
 use App\Service\Contract\DtoBuilderService;
+use HoangDo\Notification\Service\NotifyService;
+use Illuminate\Http\Request;
 
 class ApiAuthController extends Controller
 {
@@ -19,10 +22,13 @@ class ApiAuthController extends Controller
 
     private AuthService $authService;
     private DtoBuilderService $dtoBuilder;
-    public function __construct(AuthService $authService, DtoBuilderService $dtoBuilder)
+    private NotifyService $notifyService;
+
+    public function __construct(AuthService $authService, DtoBuilderService $dtoBuilder, NotifyService $notifyService)
     {
         $this->authService = $authService;
         $this->dtoBuilder = $dtoBuilder;
+        $this->notifyService = $notifyService;
     }
 
     public function register(RegisterRequest $req) {
@@ -53,6 +59,12 @@ class ApiAuthController extends Controller
     }
 
     public function forgetPassword(ForgetPasswordRequest $req) {
-        return $this->authService->forgetPassword($req, $this->user());
+        return $this->authService->forgetPassword($req);
+    }
+
+    public function logout(Request $req) {
+        $app_token = $req->header(config('notification.token_header'));
+        $this->notifyService->removeAppToken($app_token);
+        return ['data' => null];
     }
 }

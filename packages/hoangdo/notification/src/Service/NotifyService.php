@@ -54,4 +54,6 @@ interface NotifyService
     public function findOneAndReadNotification($user, $notification_id);
 
     public function listNotifications($limit, $user);
+
+    public function removeAppToken($app_token);
 }
