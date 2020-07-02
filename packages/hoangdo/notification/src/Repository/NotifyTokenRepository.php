@@ -16,7 +16,7 @@ interface NotifyTokenRepository extends RepositoryInterface, RepositoryCriteriaI
 {
     /**
      * @param $user_id
-     * @return NotifyToken[]
+     * @return NotifyToken[]|LazyCollection
      */
     public function findTokensByUserIdAndOrderByLastLog($user_id);
 
