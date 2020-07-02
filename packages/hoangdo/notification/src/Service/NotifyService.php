@@ -31,17 +31,19 @@ interface NotifyService
 
     /**
      * @param Notification $notification
+     * @param bool $will_push
      * @return Notification
      */
-    public function storeBasicOrLinkNotification(Notification $notification);
+    public function storeNotification(Notification $notification, $will_push = true);
 //
 
     /**
      * @param array $user_ids
-     * @param array $data
+     * @param Notification $data
+     * @param bool $will_push
      * @return Notification|null
      */
-    function storeBasicOrLinkNotifications(array $user_ids, array $data);
+    function storeNotifications(array $user_ids, Notification $data, $will_push = true);
 
     /**
      * @param Authenticatable $user

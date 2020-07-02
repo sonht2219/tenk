@@ -5,6 +5,8 @@ namespace HoangDo\Notification\Service;
 
 
 use Carbon\Carbon;
+use DB;
+use Exception;
 use HoangDo\Notification\Enum\NotificationStatus;
 use HoangDo\Notification\Enum\NotificationType;
 use HoangDo\Notification\Enum\OsOption;
@@ -60,21 +62,7 @@ class NotifyServiceImpl implements NotifyService
         }
         return null;
     }
-//
-//    public function storeNotificationByFields($user_id, $title, $description, $content, $type)
-//    {
-//        return $this->notify_repo->create(compact('user_id', 'title', 'description', 'content', 'type'));
-//    }
-//
-//    public function storeProductNotification($user_id, $title, $description, $content)
-//    {
-//        return $this->storeNotificationByFields($user_id, $title, $description, $content, NotificationOptions::TYPE_PRODUCT);
-//    }
-//
-//    public function storeLinkNotification($user_id, $title, $description, $content) {
-//        return $this->storeNotificationByFields($user_id, $title, $description, $content, NotificationOptions::TYPE_LINK);
-//    }
-//
+
     /**
      * @inheritDoc
      */
@@ -86,60 +74,60 @@ class NotifyServiceImpl implements NotifyService
         if (!$policy_id && (!$req_user_ids || count($req_user_ids) < 1))
             throw new NotificationFailedException('Yêu cầu chọn nhóm gửi hoặc cá nhân gửi');
 
-        if ($policy_id == config('notification.for_all_notification_id')) {
-            $notification = new Notification($data->filteredData());
+        $notification = new Notification($data->filteredData());
+
+        if($req_user_ids) {
+            $notification = $this->storeNotifications($req_user_ids, $notification);
+            $this->pushNotificationToUsers($req_user_ids, $notification);
+        } elseif ($policy_id == config('notification.for_all_notification_id')) {
             $notification->user_id = config('notification.for_all_notification_id');
-            $notification = $this->storeBasicOrLinkNotification($notification);
+            $notification = $this->storeNotification($notification);
             $this->pushNotification($notification);
-            return $notification;
+        } elseif ($policy_id) {
+            // TODO: Handle when policy_id is sent from client
         }
 
-//        $result = [];
-        $user_ids = $req_user_ids;
+        return $notification;
+    }
 //
-//        if ($policy_id) {
-//            $user_ids = [];
-//            $raw_user_ids = $this->user_repo->findAllUserIdsByPolicy($policy_id);
-//            foreach ($raw_user_ids as $user_id) $user_ids[] = $user_id->id;
-//        }
-//
-        $chunked_user_ids = array_chunk($user_ids, 100);
-        $notification_data = $data->filteredData();
-        $notification = null;
-        foreach ($chunked_user_ids as $chunked_user_id) {
-            $notification = $this->storeBasicOrLinkNotifications($chunked_user_id, $notification_data);
-            if (!$notification) {
-                throw new NotificationFailedException(__('Không thể lưu notification'));
-            }
+    public function storeNotification(Notification $notification, $will_push = true)
+    {
+        $notification->type = $notification->type ?? $this->getTypeByContent($notification->content);
+        $notification = $this->notificationRepo->save($notification);
+        if ($will_push) {
             $this->pushNotification($notification);
         }
         return $notification;
     }
-//
-    public function storeBasicOrLinkNotification(Notification $notification)
-    {
-        $notification->type = filter_var($notification->content, FILTER_VALIDATE_URL)
-            ? NotificationType::LINK
-            : NotificationType::BASIC;
-        return $this->notificationRepo->save($notification);
-    }
 
-    public function storeBasicOrLinkNotifications(array $user_ids, array $data)
+    public function storeNotifications(array $user_ids, Notification $data, $will_push = true)
     {
         $created_at = $updated_at = Carbon::now();
-        $type = filter_var($data['content'], FILTER_VALIDATE_URL)
-            ? NotificationType::LINK
-            : NotificationType::BASIC;
-        $result = new Notification($data);
-        $fillable_data = $result->getAttributes();
-        $insert_data = collect($user_ids)->map(fn($user_id) => [
-            ...$fillable_data,
-            ...compact('user_id', 'created_at', 'updated_at', 'type')
-        ])->toArray();
-        $inserted = $this->notificationRepo->insertMany($insert_data);
-        return $inserted
-            ? $result->setAttribute('type', $type)
-            : null;
+        $type = $data->type ?? $this->getTypeByContent($data->content);
+        $fillable_data = compact('created_at', 'updated_at', 'type') + $data->getAttributes();
+
+        $chunked_user_ids = array_chunk($user_ids, config('notification.limit_each_push'));
+        DB::beginTransaction();
+        $inserted = true;
+        try {
+            foreach ($chunked_user_ids as $chunked_user_id) {
+                $insert_data = collect($chunked_user_id)->map(fn($user_id) => compact('user_id') + $fillable_data)->toArray();
+                if (!$this->notificationRepo->insertMany($insert_data)) $inserted = false;
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        $inserted ? DB::commit() : DB::rollBack();
+
+        $data->setAttribute('type', $type);
+
+        if ($inserted) {
+            if ($will_push)
+                $this->pushNotificationToUsers($user_ids, $data);
+            return $data;
+        }
+        return null;
     }
 
     public function findOneAndReadNotification($user, $notification_id)
@@ -156,5 +144,12 @@ class NotifyServiceImpl implements NotifyService
     public function listNotifications($limit, $user)
     {
         return $this->notificationRepo->listNotifiesOfUser($limit, $user->id);
+    }
+
+    private function getTypeByContent($content)
+    {
+        return filter_var($content, FILTER_VALIDATE_URL)
+            ? NotificationType::LINK
+            : NotificationType::BASIC;
     }
 }

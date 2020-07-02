@@ -20,4 +20,5 @@ interface LotteryRepository extends Repository
     public function randomLotteries($session_id, $limit): Collection;
     public function countJoinTimesOfUserInSession($user_id, $session_id): int;
     public function findHistoryBuyLottery($session_id, $user_id);
+    public function findUsersJoinedSession($session_id): Collection;
 }

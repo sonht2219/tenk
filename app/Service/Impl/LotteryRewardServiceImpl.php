@@ -56,7 +56,7 @@ class LotteryRewardServiceImpl implements LotteryRewardService
         $this->rewardInfoRepo = $rewardInfoRepo;
     }
 
-    public function create(LotterySession $session)
+    public function create(LotterySession $session): LotteryReward
     {
         $winnerRetriever = $this->getRetriever();
 
