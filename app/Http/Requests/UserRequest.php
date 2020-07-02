@@ -16,6 +16,7 @@ use App\Http\Requests\Contract\ValidatedRequest;
  * @property-read $password
  * @property-read $avatar
  * @property-read $birthday
+ * @property-read bool $is_bot
  */
 class UserRequest extends ValidatedRequest
 {
@@ -32,7 +33,8 @@ class UserRequest extends ValidatedRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'max:50'],
             'avatar' => ['required', 'string'],
-            'birthday' => ['required', 'numeric']
+            'birthday' => ['required', 'numeric'],
+            'is_bot' => ['required', 'boolean']
         ];
         if ($method == 'PUT')
             $rules = [

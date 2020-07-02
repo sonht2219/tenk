@@ -11,6 +11,7 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\UpdateProfileUserRequest;
 use App\Http\Requests\UserRequest;
+use App\Repositories\Contract\BotRepository;
 use App\Repositories\Contract\UserRepository;
 use App\Repositories\Contract\WalletRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
@@ -19,6 +20,7 @@ use App\Repositories\Criteria\Common\WithRelationsCriteria;
 use App\Repositories\Criteria\User\UserSearchCriteria;
 use App\Service\Contract\FileService;
 use App\Service\Contract\UserService;
+use App\Service\Traits\GenerateIdUserTrait;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,15 +29,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserServiceImpl implements UserService
 {
+    use GenerateIdUserTrait;
     private WalletRepository $walletRepo;
     private FileService $fileService;
     private UserRepository $userRepo;
+    /**
+     * @var BotRepository
+     */
+    private BotRepository $botRepository;
 
-    public function __construct(WalletRepository $walletRepo, UserRepository $userRepo,  FileService $fileService)
+    public function __construct(WalletRepository $walletRepo, UserRepository $userRepo,  FileService $fileService, BotRepository $botRepository)
     {
         $this->walletRepo = $walletRepo;
         $this->fileService = $fileService;
         $this->userRepo = $userRepo;
+        $this->botRepository = $botRepository;
+        $this->setUserRepositoryForGenerateId($userRepo);
     }
 
     public function wallet(User $user)
@@ -71,11 +80,21 @@ class UserServiceImpl implements UserService
 
     public function createUser(UserRequest $req): User
     {
-        return $this->userRepo->create([
-            ...$req->filteredData(),
+        $reducedData = [
+            'id' => $this->generateId(),
             'password' => Hash::make($req->password),
-            'birthday' => Carbon::createFromTimestampMs($req->birthday)
-        ]);
+            'birthday' => Carbon::createFromTimestampMs($req->birthday),
+        ];
+        $user = $this->userRepo->create($reducedData + $req->filteredData());
+
+        if ($req->is_bot) {
+            $this->botRepository->create([
+                'user_id' => $user->id,
+                'limit_per_buy' => 10
+            ]);
+        }
+
+        return $user;
     }
 
     public function listUser(Request $req): LengthAwarePaginator

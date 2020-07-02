@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Criteria\Common;
 
+use App\Enum\Status\CommonStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\CriteriaInterface;
@@ -16,7 +17,7 @@ class HasStatusCriteria implements CriteriaInterface
 {
     private $status;
 
-    public function __construct($status)
+    public function __construct($status = CommonStatus::ACTIVE)
     {
         $this->status = $status;
     }

@@ -54,4 +54,12 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::put('{id}', 'Admin\UserController@edit');
         Route::delete('{id}', 'Admin\UserController@delete');
     });
+
+    Route::group(['prefix' => 'bots'], function () {
+        Route::post('','Admin\BotController@create');
+        Route::get('', 'Admin\BotController@list');
+        Route::get('{id}', 'Admin\BotController@single');
+        Route::put('{id}', 'Admin\BotController@edit');
+        Route::delete('{id}', 'Admin\BotController@delete');
+    });
 });
