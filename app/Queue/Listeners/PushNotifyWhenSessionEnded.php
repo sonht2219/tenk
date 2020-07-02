@@ -6,6 +6,7 @@ namespace App\Queue\Listeners;
 
 use App\Queue\Events\LotterySessionEnded;
 use App\Repositories\Contract\LotteryRepository;
+use HoangDo\Notification\Enum\NotificationType;
 use HoangDo\Notification\Model\Notification;
 use HoangDo\Notification\Service\NotifyService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,8 +32,9 @@ class PushNotifyWhenSessionEnded implements ShouldQueue
         $notification_reward->title = 'TENK';
         $notification_reward->description = 'Chúc mừng, bạn đã trúng thưởng đợt mở thưởng '
             . $reward->session_id.
-            'Sản phẩm trúng thưởng ' . $product->name;
-        $notification_reward->content = $notification_reward->description . '. Hãy vào mục nhận thưởng để đăng kí nhận thưởng.';
+            '. Sản phẩm trúng thưởng ' . $product->name;
+        $notification_reward->content = $reward->session_id;
+        $notification_reward->type = NotificationType::SESSION;
         $this->notifyService->storeNotifications([$reward->user_id], $notification_reward);
 
         //push đến các user đã tham gia khác
@@ -46,7 +48,8 @@ class PushNotifyWhenSessionEnded implements ShouldQueue
         $notification->description = 'Đợt mở thưởng ' . $reward->session_id .
             ' của sản phẩm ' . $product->name .
             ' đã kết thúc. Mã trúng thưởng là: ' . $lottery->serial;
-        $notification->content = $notification->description;
+        $notification->content = $reward->session_id;
+        $notification->type = NotificationType::SESSION;
         $this->notifyService->storeNotifications($joined_users, $notification);
     }
 }
