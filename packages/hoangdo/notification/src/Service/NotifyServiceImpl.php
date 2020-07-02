@@ -152,4 +152,9 @@ class NotifyServiceImpl implements NotifyService
             ? NotificationType::LINK
             : NotificationType::BASIC;
     }
+
+    public function removeAppToken($app_token)
+    {
+        return $this->tokenRepo->removeByAppToken($app_token);
+    }
 }
