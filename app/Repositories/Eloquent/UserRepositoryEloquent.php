@@ -39,4 +39,12 @@ class UserRepositoryEloquent extends RepositoryEloquent implements UserRepositor
             ->where('phone_number', $phone_number)
             ->exists();
     }
+
+    public function findByIdWithRelation($id, $relations = [])
+    {
+        return $this->model->newQuery()
+            ->where('id', $id)
+            ->with($relations)
+            ->firstOrFail();
+    }
 }
