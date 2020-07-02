@@ -42,7 +42,7 @@ class NotifyTokenRepositoryEloquent extends BaseRepository implements NotifyToke
         return $this->model->newQuery()
             ->whereIn('user_id', $user_ids)
             ->orderBy('updated_at', 'asc')
-            ->get();
+            ->cursor();
     }
 
     public function findTokensOfActiveUsers()
@@ -51,7 +51,7 @@ class NotifyTokenRepositoryEloquent extends BaseRepository implements NotifyToke
             ->whereHas('user', function (Builder $q) {
                 return $q->where('status', 1);
             })
-            ->get();
+            ->cursor();
     }
 
     public function delete($id)

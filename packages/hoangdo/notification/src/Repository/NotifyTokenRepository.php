@@ -3,6 +3,7 @@
 namespace HoangDo\Notification\Repository;
 
 use HoangDo\Notification\Model\NotifyToken;
+use Illuminate\Support\LazyCollection;
 use Prettus\Repository\Contracts\RepositoryCriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
@@ -21,12 +22,12 @@ interface NotifyTokenRepository extends RepositoryInterface, RepositoryCriteriaI
 
     /**
      * @param array $user_ids
-     * @return NotifyToken[]
+     * @return NotifyToken[]|LazyCollection
      */
     public function findTokensByUserIdsAndOrderByLastLog($user_ids);
 
     /**
-     * @return NotifyToken[]
+     * @return NotifyToken[]|LazyCollection
      */
     public function findTokensOfActiveUsers();
 

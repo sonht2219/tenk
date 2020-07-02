@@ -107,4 +107,14 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
             ->with(['user'])
             ->get();
     }
+
+    public function findUsersJoinedSession($session_id): Collection
+    {
+        return $this->model->newQuery()
+            ->where('session_id', $session_id)
+            ->whereNotNull('user_id')
+            ->groupBy('user_id')
+            ->select('user_id')
+            ->get();
+    }
 }

@@ -143,3 +143,63 @@ if (!function_exists('phone_to_valid')) {
         return $phone_number;
     }
 }
+
+if (!function_exists('curl_get')) {
+    function curl_get($url) {
+        // Khởi tạo CURL
+        $ch = curl_init($url);
+
+        // Thiết lập có return
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Thiết lập sử dụng trình duyệt hiện tại
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.5 [en] (X11; U; Linux 2.2.9 i586).');
+
+        $result = curl_exec($ch);
+        $err = curl_error($ch);
+
+        curl_close($ch);
+
+        if($err)
+            return null;
+
+        try {
+            return json_decode($result);
+        } catch (Exception $e) {
+            return $result;
+        }
+    }
+}
+
+if (!function_exists('curl_post')) {
+    function curl_post($url, $data, $options = null) {
+        if($options && isset($options['params']))
+            $url .= '?' . http_build_query($options['params']);
+        // Khởi tạo CURL
+        $ch = curl_init($url);
+
+        // Thiết lập có return
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        // Thiết lập sử dụng trình duyệt hiện tại
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.5 [en] (X11; U; Linux 2.2.9 i586).');
+        if ($options) {
+            if (isset($options['headers'])) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $options['headers']);
+            } else {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            }
+        }
+
+        $result = curl_exec($ch);
+        $error = curl_error($ch);
+
+        curl_close($ch);
+        if ($error) return null;
+        try {
+            return json_decode($result);
+        } catch (Exception $e) {
+            return $result;
+        }
+    }
+}

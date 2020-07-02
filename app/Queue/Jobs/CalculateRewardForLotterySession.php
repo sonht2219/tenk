@@ -6,10 +6,12 @@ namespace App\Queue\Jobs;
 
 use App\Enum\Status\LotterySessionStatus;
 use App\Models\LotterySession;
+use App\Queue\Events\LotterySessionEnded;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Service\Contract\LotteryRewardService;
 use DB;
 use Exception;
+use HoangDo\Notification\Service\NotifyService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,9 +33,10 @@ class CalculateRewardForLotterySession implements ShouldQueue
         DB::beginTransaction();
         try {
             $session = $this->session;
-            $rewardService->create($session);
+            $reward = $rewardService->create($session);
             $session->status = LotterySessionStatus::ENDING;
             $lotterySessionRepo->save($session);
+            event(new LotterySessionEnded($reward));
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

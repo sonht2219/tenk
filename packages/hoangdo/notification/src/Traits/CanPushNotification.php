@@ -105,9 +105,6 @@ trait CanPushNotification
 
     public function pushNotification($notification)
     {
-        $user_id = $notification->user_id;
-        $shared_data = new NotifySharedData($notification);
-        $extra_data = new IOSExtraData($notification);
-        $this->pushNotificationToUser($user_id, $shared_data, $extra_data);
+        $this->pushNotificationToUser($notification->user_id, $notification, null);
     }
 }
