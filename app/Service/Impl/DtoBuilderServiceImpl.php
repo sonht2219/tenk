@@ -13,6 +13,7 @@ use App\Enum\Type\UserAddressType;
 use App\Helper\Constant;
 use App\Models\Article;
 use App\Models\Banner;
+use App\Models\Bot;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
@@ -313,5 +314,23 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'status_title' => CommonStatus::getDescription($banner->status),
             'ordinal_number' => $banner->ordinal_number,
         ];
+    }
+
+    public function buildBotDto(Bot $bot)
+    {
+        $result = [
+            'id' => $bot->id,
+            'user_id' => $bot->user_id,
+            'created_at' => $bot->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $bot->updated_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'status' => $bot->status,
+            'status_title' => CommonStatus::getDescription($bot->status),
+            'limit_per_buy' => $bot->limit_per_buy,
+        ];
+
+        if ($bot->relationLoaded('user') && $bot->user)
+            $result['user'] = $this->buildUserDto($bot->user);
+
+        return $result;
     }
 }

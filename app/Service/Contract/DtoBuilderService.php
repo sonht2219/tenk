@@ -6,6 +6,7 @@ namespace App\Service\Contract;
 
 use App\Models\Article;
 use App\Models\Banner;
+use App\Models\Bot;
 use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
@@ -28,4 +29,5 @@ interface DtoBuilderService
     public function buildTransactionDto(Transaction $transaction);
     public function buildArticleDto(Article $article);
     public function buildBannerDto(Banner $banner);
+    public function buildBotDto(Bot $bot);
 }

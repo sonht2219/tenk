@@ -25,6 +25,7 @@ class UserSearchCriteria implements CriteriaInterface
         return $model->where(function (Builder $q) {
             $search = '%' . $this->search . '%';
             return $q->where('name', 'like', $search)
+                ->orWhere('phone_number', 'like', $search)
                 ->orWhere('email', 'like', $search);
         });
     }

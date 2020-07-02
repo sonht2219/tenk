@@ -6,6 +6,7 @@ use App\Service\Contract\ArticleService;
 use App\Service\Contract\AuthService;
 use App\Service\Contract\BannerService;
 use App\Service\Contract\BannerTypeService;
+use App\Service\Contract\BotService;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FeedbackService;
 use App\Service\Contract\FileService;
@@ -20,6 +21,7 @@ use App\Service\Impl\ArticleServiceImpl;
 use App\Service\Impl\AuthServiceImpl;
 use App\Service\Impl\BannerServiceImpl;
 use App\Service\Impl\BannerTypeServiceImpl;
+use App\Service\Impl\BotServiceImpl;
 use App\Service\Impl\DtoBuilderServiceImpl;
 use App\Service\Impl\FeedBackServiceImpl;
 use App\Service\Impl\FileServiceImpl;
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
         ArticleService::class => ArticleServiceImpl::class,
         BannerService::class => BannerServiceImpl::class,
         BannerTypeService::class => BannerTypeServiceImpl::class,
+        BotService::class => BotServiceImpl::class,
     ];
     /**
      * Register any application services.
