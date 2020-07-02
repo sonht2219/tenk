@@ -7,6 +7,7 @@ namespace App\Queue\Listeners;
 use App\Models\LotterySession;
 use App\Queue\Events\LotterySessionStartCountDown;
 use App\Repositories\Contract\LotteryRepository;
+use HoangDo\Notification\Enum\NotificationType;
 use HoangDo\Notification\Model\Notification;
 use HoangDo\Notification\Service\NotifyService;
 use HoangDo\Notification\Traits\CanPushNotification;
@@ -29,9 +30,10 @@ class PushNotifyWhenSessionStartCountDown implements ShouldQueue
         $product = $session->product;
         $user_ids = $this->lotteryRepo->findUsersJoinedSession($session->id)->pluck('user_id')->toArray();
         $notification = new Notification();
-        $notification->title = 'Tenk';
-        $notification->content = 'Sản phẩm '. $product->name . ' - Đợt ' . $session->id . ' bắt đầu mở thưởng.';
+        $notification->title = 'TENK';
+        $notification->content = $session->id;
         $notification->description = 'Sản phẩm '. $product->name . ' - Đợt .' . $session->id . ' bắt đầu mở thưởng.';
+        $notification->type = NotificationType::SESSION;
         $this->notifyService->storeNotifications($user_ids, $notification);
     }
 }
