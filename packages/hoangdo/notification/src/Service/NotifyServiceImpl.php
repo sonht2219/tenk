@@ -48,7 +48,7 @@ class NotifyServiceImpl implements NotifyService
 
             if (!$selected_token) {
                 if (count($existed_tokens) >= config('notification.limit_each_user')) {
-                    $selected_token = $existed_tokens[0];
+                    $selected_token = collect($existed_tokens)->toArray()[0];
                 } else {
                     $selected_token = new NotifyToken();
                     $selected_token->user_id = $user_id;

@@ -35,7 +35,7 @@ class NotifyTokenRepositoryEloquent extends BaseRepository implements NotifyToke
 
     public function findTokensByUserIdAndOrderByLastLog($user_id)
     {
-        return $this->findTokensByUserIdsAndOrderByLastLog([$user_id])->toArray();
+        return $this->findTokensByUserIdsAndOrderByLastLog([$user_id]);
     }
 
     public function findTokensByUserIdsAndOrderByLastLog($user_ids) {
