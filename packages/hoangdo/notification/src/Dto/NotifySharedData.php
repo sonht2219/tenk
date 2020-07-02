@@ -15,6 +15,7 @@ class NotifySharedData
     public $click_action;
     public $type;
     public $room;
+    public $content;
 
     /**
      * NotifySharedData constructor.
@@ -35,7 +36,10 @@ class NotifySharedData
 //                case NotificationOptions::TYPE_STREAM:
 //                    $this->room = $notification->content;
 //                    break;
+                case NotificationType::BASIC:
+                    break;
                 default:
+                    $this->content = $notification->content;
                     break;
             }
         }
