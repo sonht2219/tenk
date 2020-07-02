@@ -20,4 +20,6 @@ interface UserRepository extends Repository
     public function findByPhoneNumberOrFails(string $phone_number): User;
 
     public function existPhoneNumber($phone_number): bool;
+
+    public function findByIdWithRelation($id, $relations = []);
 }

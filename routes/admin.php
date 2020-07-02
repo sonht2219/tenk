@@ -46,4 +46,12 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::put('{id}', 'Admin\BannerController@edit');
         Route::delete('{id}', 'Admin\BannerController@delete');
     });
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::post('', 'Admin\UserController@create');
+        Route::get('', 'Admin\UserController@list');
+        Route::get('{id}', 'Admin\UserController@single');
+        Route::put('{id}', 'Admin\UserController@edit');
+        Route::delete('{id}', 'Admin\UserController@delete');
+    });
 });
