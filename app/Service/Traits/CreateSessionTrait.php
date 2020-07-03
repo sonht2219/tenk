@@ -19,6 +19,7 @@ trait CreateSessionTrait
         $this->initializeCreateSession();
         $session = new LotterySession();
         $session->product()->associate($product);
+        $session->price = $product->price;
 
         $session = $this->lotterySessionRepo->save($session);
 

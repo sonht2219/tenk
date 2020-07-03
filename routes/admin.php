@@ -21,6 +21,10 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('products-count', 'Admin\DashboardController@productsCount');
         Route::get('lotteries-count', 'Admin\DashboardController@lotteriesCount');
         Route::get('sessions-count', 'Admin\DashboardController@sessionsCount');
+        Route::get('revenue', 'Admin\DashboardController@statisticRevenue');
+        Route::get('session', 'Admin\DashboardController@statisticSession');
+        Route::get('top-user', 'Admin\DashboardController@statisticTopUser');
+        Route::get('top-product', 'Admin\DashboardController@statisticTopProduct');
     });
 
     Route::group(['prefix' => 'articles'], function () {

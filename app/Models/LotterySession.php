@@ -33,6 +33,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotterySession whereTimeEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotterySession whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $price
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\LotterySession wherePrice($value)
  */
 class LotterySession extends Model
 {
@@ -43,6 +45,7 @@ class LotterySession extends Model
      */
     protected $fillable = [
         'product_id',
+        'price',
         'status',
         'time_end'
     ];

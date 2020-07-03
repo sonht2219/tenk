@@ -17,9 +17,17 @@ use App\Queue\Jobs\CalculateRewardForLotterySession;
 use App\Repositories\Contract\LotteryRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
+use App\Repositories\Criteria\Common\HasFromCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
+use App\Repositories\Criteria\Common\HasToCriteria;
+use App\Repositories\Criteria\Common\WithRelationsCriteria;
+use App\Repositories\Criteria\Lottery\LotteryHasJoinedAtFromCriteria;
+use App\Repositories\Criteria\Lottery\LotteryHasJoinedAtToCriteria;
 use App\Repositories\Criteria\Lottery\LotteryHasLotterySessionIdCriteria;
+use App\Repositories\Criteria\Lottery\LotteryHasUserIdNotNullCriteria;
 use App\Repositories\Criteria\Lottery\LotterySearchCriteria;
+use App\Repositories\Criteria\Lottery\LotteryStatisticByDayCriteria;
+use App\Repositories\Criteria\Lottery\LotteryStatisticTopUserCriteria;
 use App\Service\Contract\LotteryService;
 use App\Service\Traits\CanUseWallet;
 use App\Service\Traits\CreateSessionTrait;
@@ -42,7 +50,7 @@ class LotteryServiceImpl implements LotteryService
 
     public function syncLotteryForSession(LotterySession $session)
     {
-        $newLotteryCount = $session->product->price;
+        $newLotteryCount = $session->price;
         for ($i = 0; $i < $newLotteryCount; $i++) {
             $newLottery = new Lottery();
             $newLottery->session()->associate($session);
@@ -91,7 +99,7 @@ class LotteryServiceImpl implements LotteryService
                 throw new ExecuteException(__('Phiếu ' . implode(', ', $invalids) . ' không hợp lệ. Vui lòng chọn phiếu khác'));
         } else {
             $lottery_quantity = $req->get('lottery_quantity');
-            if ($lottery_session->sold_quantity + $lottery_quantity > $lottery_session->product->price)
+            if ($lottery_session->sold_quantity + $lottery_quantity > $lottery_session->price)
                 throw new ExecuteException('Số lượng phiếu không đủ');
             $lotteries = $this->lotteryRepo->randomLotteries($lottery_session->id, $lottery_quantity);
             if (!$lotteries || !count($lotteries))
@@ -101,7 +109,7 @@ class LotteryServiceImpl implements LotteryService
 
         $amount_lotteries = count($lotteries);
         $sold_quantity = $lottery_session->sold_quantity += $amount_lotteries;
-        if ($sold_quantity > $lottery_session->product->price)
+        if ($sold_quantity > $lottery_session->price)
             throw new ExecuteException(__('Số lượng phiếu không đủ'));
 
         $total_price = $amount_lotteries * $this->getUnitPriceLottery();
@@ -115,7 +123,7 @@ class LotteryServiceImpl implements LotteryService
 
         $lottery_session->update(['sold_quantity' => $sold_quantity]);
 
-        if ($sold_quantity == $lottery_session->product->price && $lottery_session->product->status == CommonStatus::ACTIVE) {
+        if ($sold_quantity == $lottery_session->price && $lottery_session->product->status == CommonStatus::ACTIVE) {
             $delay = $this->getTimeCountDown() - 2 * 1000;
             $this->countDownLotterySession($lottery_session, $now);
             $this->createLotterySession($lottery_session->product);
@@ -169,4 +177,30 @@ class LotteryServiceImpl implements LotteryService
         return $this->lotteryRepo->count();
     }
 
+    public function statisticByDay($from, $to)
+    {
+        if ($from)
+            $this->lotteryRepo->pushCriteria(new LotteryHasJoinedAtFromCriteria($from));
+        if ($to)
+            $this->lotteryRepo->pushCriteria(new LotteryHasJoinedAtToCriteria($to));
+
+        $this->lotteryRepo->pushCriteria(LotteryHasUserIdNotNullCriteria::class);
+        $this->lotteryRepo->pushCriteria(LotteryStatisticByDayCriteria::class);
+
+        return $this->lotteryRepo->all();
+    }
+
+    public function statisticTopUser($from, $to)
+    {
+        if ($from)
+            $this->lotteryRepo->pushCriteria(new HasFromCriteria($from));
+        if ($to)
+            $this->lotteryRepo->pushCriteria(new HasToCriteria($to));
+
+        $this->lotteryRepo->pushCriteria(LotteryHasUserIdNotNullCriteria::class);
+        $this->lotteryRepo->pushCriteria(LotteryStatisticTopUserCriteria::class);
+        $this->lotteryRepo->pushCriteria(new WithRelationsCriteria('user'));
+
+        return $this->lotteryRepo->all();
+    }
 }
