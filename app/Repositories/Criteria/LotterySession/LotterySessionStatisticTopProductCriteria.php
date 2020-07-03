@@ -11,6 +11,13 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 class LotterySessionStatisticTopProductCriteria implements CriteriaInterface
 {
 
+    private $limit;
+
+    public function __construct($limit)
+    {
+        $this->limit = $limit;
+    }
+
     /**
      * @inheritDoc
      */
@@ -22,6 +29,7 @@ class LotterySessionStatisticTopProductCriteria implements CriteriaInterface
                 'product_id',
                 DB::raw('sum(price) as total_revenue')
             ])
-            ->orderBy('total_revenue', 'desc');
+            ->orderBy('total_revenue', 'desc')
+            ->limit($this->limit);
     }
 }

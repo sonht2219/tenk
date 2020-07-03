@@ -123,14 +123,14 @@ class LotterySessionServiceImpl implements LotterySessionService
         return $this->lotterySessionRepo->all();
     }
 
-    public function statisticTopProduct($from, $to)
+    public function statisticTopProduct($from, $to, $limit)
     {
         if ($from)
             $this->lotterySessionRepo->pushCriteria(new HasFromCriteria($from));
         if ($to)
             $this->lotterySessionRepo->pushCriteria(new HasToCriteria($to));
 
-        $this->lotterySessionRepo->pushCriteria(LotterySessionStatisticTopProductCriteria::class);
+        $this->lotterySessionRepo->pushCriteria(new LotterySessionStatisticTopProductCriteria($limit));
         $this->lotterySessionRepo->pushCriteria(new WithRelationsCriteria('product'));
 
         return $this->lotterySessionRepo->all();

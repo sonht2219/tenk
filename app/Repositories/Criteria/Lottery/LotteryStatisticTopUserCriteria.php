@@ -11,6 +11,13 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 class LotteryStatisticTopUserCriteria implements CriteriaInterface
 {
 
+    private $limit;
+
+    public function __construct($limit)
+    {
+        $this->limit = $limit;
+    }
+
     /**
      * @inheritDoc
      */
@@ -22,6 +29,7 @@ class LotteryStatisticTopUserCriteria implements CriteriaInterface
                 'user_id',
                 DB::raw('count(*) as total_lottery')
             ])
-            ->orderBy('total_lottery', 'desc');
+            ->orderBy('total_lottery', 'desc')
+            ->limit($this->limit);
     }
 }

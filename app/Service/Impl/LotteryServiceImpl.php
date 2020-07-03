@@ -190,7 +190,7 @@ class LotteryServiceImpl implements LotteryService
         return $this->lotteryRepo->all();
     }
 
-    public function statisticTopUser($from, $to)
+    public function statisticTopUser($from, $to, $limit)
     {
         if ($from)
             $this->lotteryRepo->pushCriteria(new HasFromCriteria($from));
@@ -198,7 +198,7 @@ class LotteryServiceImpl implements LotteryService
             $this->lotteryRepo->pushCriteria(new HasToCriteria($to));
 
         $this->lotteryRepo->pushCriteria(LotteryHasUserIdNotNullCriteria::class);
-        $this->lotteryRepo->pushCriteria(LotteryStatisticTopUserCriteria::class);
+        $this->lotteryRepo->pushCriteria(new LotteryStatisticTopUserCriteria($limit));
         $this->lotteryRepo->pushCriteria(new WithRelationsCriteria('user'));
 
         return $this->lotteryRepo->all();

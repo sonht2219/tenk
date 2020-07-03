@@ -20,5 +20,5 @@ interface LotteryService
     public function countSoldLottery();
     public function getHistoryBuyLotteryOfSession($session_id, $user_id);
     public function statisticByDay($from, $to);
-    public function statisticTopUser($from, $to);
+    public function statisticTopUser($from, $to, $limit);
 }

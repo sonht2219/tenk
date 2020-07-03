@@ -85,7 +85,7 @@ class DashboardController extends Controller
 
     public function statisticTopUser(Request $req) {
         $data = $this->parserDataFromReq($req);
-        $top_user = $this->lotteryService->statisticTopUser($data['from'], $data['to']);
+        $top_user = $this->lotteryService->statisticTopUser($data['from'], $data['to'], $data['limit']);
         return collect($top_user)->map(fn($obj) => $this->dtoBuilder->buildStatisticTopUser($obj));
     }
 
@@ -97,13 +97,14 @@ class DashboardController extends Controller
 
     public function statisticTopProduct(Request $req) {
         $data = $this->parserDataFromReq($req);
-        $top_product = $this->sessionService->statisticTopProduct($data['from'], $data['to']);
+        $top_product = $this->sessionService->statisticTopProduct($data['from'], $data['to'], $data['limit']);
         return collect($top_product)->map(fn($obj) => $this->dtoBuilder->buildStatisticTopProduct($obj));
     }
 
     private function parserDataFromReq(Request $req) {
         $from = $req->get('from') ? Carbon::createFromTimestampMs($req->get('from')) : null;
         $to = $req->get('to') ? Carbon::createFromTimestampMs($req->get('to')) : null;
-        return compact('from', 'to');
+        $limit = $req->get('limit') ?: 10;
+        return compact('from', 'to', 'limit');
     }
 }
