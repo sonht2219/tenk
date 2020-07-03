@@ -22,4 +22,6 @@ interface LotterySessionService
     public function historyMine(Request $req, User $user): LengthAwarePaginator;
     public function countByStatus($status);
     public function userJoinedSession($session_id, $user_id): bool;
+    public function statisticSessionByDay($from, $to);
+    public function statisticTopProduct($from, $to);
 }

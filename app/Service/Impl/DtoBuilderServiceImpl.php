@@ -24,16 +24,19 @@ use App\Models\Transaction;
 use App\Models\UserAddress;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\FileService;
+use App\Service\Contract\LotteryService;
 use App\User;
 use Carbon\Carbon;
 
 class DtoBuilderServiceImpl implements DtoBuilderService
 {
     private FileService $fileService;
+    private LotteryService $lotteryService;
 
-    public function __construct(FileService $fileService)
+    public function __construct(FileService $fileService, LotteryService $lotteryService)
     {
         $this->fileService = $fileService;
+        $this->lotteryService = $lotteryService;
     }
 
     public function buildProductDto(Product $product)
@@ -87,6 +90,7 @@ class DtoBuilderServiceImpl implements DtoBuilderService
         $result = [
             'id' => $lottery_session->id,
             'product_id' => $lottery_session->product_id,
+            'price' => $lottery_session->price,
             'product' => null,
             'time_end' => $lottery_session->time_end,
             'sold_quantity' => $lottery_session->sold_quantity,
@@ -332,5 +336,39 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             $result['user'] = $this->buildUserDto($bot->user);
 
         return $result;
+    }
+
+    public function buildStatisticRevenueByDay($revenue_statistic)
+    {
+        return [
+            'date' => $revenue_statistic->date,
+            'value' => $revenue_statistic->total_lottery * $this->lotteryService->getUnitPriceLottery() * 1000
+        ];
+    }
+
+    public function buildStatisticTopUser($top_user)
+    {
+        return [
+            'user_id' => $top_user->user_id,
+            'user' => $top_user->user,
+            'value' => $top_user->total_lottery * $this->lotteryService->getUnitPriceLottery() * 1000
+        ];
+    }
+
+    public function buildStatisticSessionByDay($session_statistic)
+    {
+        return [
+            'date' => $session_statistic->date,
+            'value' => $session_statistic->total_session
+        ];
+    }
+
+    public function buildStatisticTopProduct($top_product)
+    {
+        return [
+            'product_id' => $top_product->product_id,
+            'product' => $top_product->product,
+            'value' => $top_product->total_revenue * $this->lotteryService->getUnitPriceLottery() * 1000
+        ];
     }
 }

@@ -9,9 +9,16 @@ use App\Models\LotterySession;
 use App\Repositories\Contract\LotteryRepository;
 use App\Repositories\Contract\LotterySessionRepository;
 use App\Repositories\Contract\ProductRepository;
+use App\Repositories\Criteria\Common\HasFromCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
+use App\Repositories\Criteria\Common\HasToCriteria;
+use App\Repositories\Criteria\Common\WithRelationsCriteria;
+use App\Repositories\Criteria\Lottery\LotteryHasJoinedAtFromCriteria;
+use App\Repositories\Criteria\Lottery\LotteryHasJoinedAtToCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionHasProductIdCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionSearchCriteria;
+use App\Repositories\Criteria\LotterySession\LotterySessionStatisticByDayCriteria;
+use App\Repositories\Criteria\LotterySession\LotterySessionStatisticTopProductCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionWithProductCriteria;
 use App\Repositories\Criteria\LotterySession\LotterySessionWithRelationCriteria;
 use App\Service\Contract\LotterySessionService;
@@ -102,5 +109,30 @@ class LotterySessionServiceImpl implements LotterySessionService
     public function userJoinedSession($session_id, $user_id): bool
     {
         return $this->lotterySessionRepo->userJoinedSession($session_id, $user_id);
+    }
+
+    public function statisticSessionByDay($from, $to)
+    {
+        if ($from)
+            $this->lotterySessionRepo->pushCriteria(new HasFromCriteria($from));
+        if ($to)
+            $this->lotterySessionRepo->pushCriteria(new HasToCriteria($to));
+
+        $this->lotterySessionRepo->pushCriteria(LotterySessionStatisticByDayCriteria::class);
+
+        return $this->lotterySessionRepo->all();
+    }
+
+    public function statisticTopProduct($from, $to)
+    {
+        if ($from)
+            $this->lotterySessionRepo->pushCriteria(new HasFromCriteria($from));
+        if ($to)
+            $this->lotterySessionRepo->pushCriteria(new HasToCriteria($to));
+
+        $this->lotterySessionRepo->pushCriteria(LotterySessionStatisticTopProductCriteria::class);
+        $this->lotterySessionRepo->pushCriteria(new WithRelationsCriteria('product'));
+
+        return $this->lotterySessionRepo->all();
     }
 }

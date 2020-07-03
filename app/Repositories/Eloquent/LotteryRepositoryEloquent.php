@@ -117,4 +117,18 @@ class LotteryRepositoryEloquent extends RepositoryEloquent implements LotteryRep
             ->select('user_id')
             ->get();
     }
+
+    public function statisticByDay($from, $to)
+    {
+        return $this->model->newQuery()
+            ->whereNotNull('joined_at')
+            ->where('joined_at', '>=', $from)
+            ->where('joined_at', '<=', $to)
+            ->groupBy(DB::raw('date(created_at)'))
+            ->select([
+                DB::raw('date(created_at) as date'),
+                DB::raw('count(*) as total_lottery')
+            ])
+            ->get();
+    }
 }

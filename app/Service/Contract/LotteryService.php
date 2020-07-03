@@ -8,6 +8,7 @@ use App\Http\Requests\BuyLotteryRequest;
 use App\Models\LotterySession;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface LotteryService
 {
@@ -18,4 +19,6 @@ interface LotteryService
     public function getUnitPriceLottery();
     public function countSoldLottery();
     public function getHistoryBuyLotteryOfSession($session_id, $user_id);
+    public function statisticByDay($from, $to);
+    public function statisticTopUser($from, $to);
 }

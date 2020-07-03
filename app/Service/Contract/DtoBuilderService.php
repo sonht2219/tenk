@@ -30,4 +30,8 @@ interface DtoBuilderService
     public function buildArticleDto(Article $article);
     public function buildBannerDto(Banner $banner);
     public function buildBotDto(Bot $bot);
+    public function buildStatisticRevenueByDay($revenue_statistic);
+    public function buildStatisticTopUser($top_user);
+    public function buildStatisticSessionByDay($session_statistic);
+    public function buildStatisticTopProduct($top_product);
 }
