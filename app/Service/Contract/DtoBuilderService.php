@@ -33,5 +33,5 @@ interface DtoBuilderService
     public function buildStatisticRevenueByDay($revenue_statistic);
     public function buildStatisticTopUser($top_user);
     public function buildStatisticSessionByDay($session_statistic);
-    public function buildStatisticTopProduct($top_product);
+    public function buildStatisticTopProduct($top_product, $total);
 }

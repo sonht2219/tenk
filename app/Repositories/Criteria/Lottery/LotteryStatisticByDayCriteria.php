@@ -17,9 +17,9 @@ class LotteryStatisticByDayCriteria implements CriteriaInterface
     public function apply($model, RepositoryInterface $repository)
     {
         return $model
-            ->groupBy(DB::raw('date(created_at)'))
+            ->groupBy(DB::raw('date(FROM_UNIXTIME(joined_at/1000))'))
             ->select([
-                DB::raw('date(created_at) as date'),
+                DB::raw('date(FROM_UNIXTIME(joined_at/1000)) as date'),
                 DB::raw('count(*) as total_lottery')
             ]);
     }

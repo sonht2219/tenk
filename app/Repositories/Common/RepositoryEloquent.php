@@ -75,4 +75,16 @@ abstract class RepositoryEloquent extends BaseRepository implements Repository
         }
         return $object;
     }
+
+    public function sum($column)
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $results = $this->model->sum($column);
+
+        $this->resetModel();
+
+        return $results;
+    }
 }

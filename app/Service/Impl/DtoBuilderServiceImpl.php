@@ -363,12 +363,14 @@ class DtoBuilderServiceImpl implements DtoBuilderService
         ];
     }
 
-    public function buildStatisticTopProduct($top_product)
+    public function buildStatisticTopProduct($top_product, $total)
     {
         return [
             'product_id' => $top_product->product_id,
             'product' => $top_product->product,
-            'value' => $top_product->total_revenue * $this->lotteryService->getUnitPriceLottery() * 1000
+            'product_name' => $top_product->product->name,
+            'value' => $top_product->total_revenue,
+            'percent' => round($top_product->total_revenue * 100 / $total)
         ];
     }
 }

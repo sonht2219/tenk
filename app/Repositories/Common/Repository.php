@@ -49,4 +49,10 @@ interface Repository extends RepositoryInterface, RepositoryCriteriaInterface
      * @return mixed
      */
     public function save($object);
+
+    /**
+     * @param $column
+     * @return int
+     */
+    public function sum($column);
 }

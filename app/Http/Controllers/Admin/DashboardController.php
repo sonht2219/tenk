@@ -98,7 +98,28 @@ class DashboardController extends Controller
     public function statisticTopProduct(Request $req) {
         $data = $this->parserDataFromReq($req);
         $top_product = $this->sessionService->statisticTopProduct($data['from'], $data['to'], $data['limit']);
-        return collect($top_product)->map(fn($obj) => $this->dtoBuilder->buildStatisticTopProduct($obj));
+        $total_revenue = $this->sessionService->statisticTotalRevenue($data['from'], $data['to']);
+
+        $others_revenue = $total_revenue;
+        $other_percent = 100;
+        $result = collect($top_product)->map(function($obj) use ($total_revenue, &$others_revenue, &$other_percent) {
+            $others_revenue -= $obj->total_revenue;
+            $result = $this->dtoBuilder->buildStatisticTopProduct($obj, $total_revenue);
+            $other_percent -= $result['percent'];
+            return $result;
+        });
+
+        if ($other_percent > 0) {
+            $result->push([
+                'product_id' => null,
+                'product' => null,
+                'product_name' => __('Còn lại'),
+                'value' => $others_revenue,
+                'percent' => $other_percent
+            ]);
+        }
+
+        return $result;
     }
 
     private function parserDataFromReq(Request $req) {

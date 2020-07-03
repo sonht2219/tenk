@@ -135,4 +135,15 @@ class LotterySessionServiceImpl implements LotterySessionService
 
         return $this->lotterySessionRepo->all();
     }
+
+    public function statisticTotalRevenue($from, $to)
+    {
+        $this->lotterySessionRepo->resetCriteria();
+        if ($from)
+            $this->lotterySessionRepo->pushCriteria(new HasFromCriteria($from));
+        if ($to)
+            $this->lotterySessionRepo->pushCriteria(new HasToCriteria($to));
+
+        return $this->lotterySessionRepo->sum('price');
+    }
 }
