@@ -58,7 +58,8 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'original_price_pretty' => number_format($product->original_price),
             'thumbnail' => $product->thumbnail,
             'thumbnail_url' => $this->fileService->uploaded_url($product->thumbnail),
-            'creator_id' => $product->creator_id
+            'creator_id' => $product->creator_id,
+            'use_bot' => $product->use_bot,
         ];
 
         if ($product->relationLoaded('creator') && $product->creator)

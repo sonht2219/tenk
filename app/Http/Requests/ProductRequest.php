@@ -19,6 +19,7 @@ use Illuminate\Validation\Rule;
  * @property-read int $original_price
  * @property-read int|null $status
  * @property-read bool|null $will_start_session
+ * @property-read bool $use_bot
  */
 class ProductRequest extends ValidatedRequest
 {
@@ -33,7 +34,8 @@ class ProductRequest extends ValidatedRequest
             'price' => ['required', 'numeric', 'min:0'],
             'original_price' => ['required', 'numeric', 'min:0'],
             'status' => ['nullable', 'numeric', Rule::in(CommonStatus::getValues())],
-            'will_start_session' => ['nullable', 'boolean']
+            'will_start_session' => ['nullable', 'boolean'],
+            'use_bot' => ['required', 'boolean'],
         ];
     }
 }

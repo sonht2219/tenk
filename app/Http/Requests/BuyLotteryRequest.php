@@ -8,7 +8,6 @@ use App\Http\Requests\Contract\ValidatedRequest;
 
 class BuyLotteryRequest extends ValidatedRequest
 {
-
     /**
      * @inheritDoc
      */

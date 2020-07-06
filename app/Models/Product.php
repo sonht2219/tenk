@@ -21,6 +21,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property int $price
  * @property int $original_price
  * @property string $creator_id
+ * @property boolean $use_bot
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $status 1: Hoạt động. -1: Không hoạt động.
@@ -58,7 +59,12 @@ class Product extends Model
         'price',
         'original_price',
         'status',
-        'creator_id'
+        'creator_id',
+        'use_bot'
+    ];
+
+    protected $casts = [
+        'use_bot' => 'boolean'
     ];
 
     public function creator() {

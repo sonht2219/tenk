@@ -47,4 +47,6 @@ interface ProductService
     public function delete($id): Product;
 
     public function countProductsByStatus($status);
+
+    public function triggerUseBot($id): Product;
 }

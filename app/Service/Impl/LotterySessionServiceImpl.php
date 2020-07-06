@@ -12,6 +12,7 @@ use App\Repositories\Contract\ProductRepository;
 use App\Repositories\Criteria\Common\HasFromCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Common\HasToCriteria;
+use App\Repositories\Criteria\Common\OrderRandomCriteria;
 use App\Repositories\Criteria\Common\WithRelationsCriteria;
 use App\Repositories\Criteria\Lottery\LotteryHasJoinedAtFromCriteria;
 use App\Repositories\Criteria\Lottery\LotteryHasJoinedAtToCriteria;
@@ -145,5 +146,15 @@ class LotterySessionServiceImpl implements LotterySessionService
             $this->lotterySessionRepo->pushCriteria(new HasToCriteria($to));
 
         return $this->lotterySessionRepo->sum('price');
+    }
+
+    public function findRandomSessions($limit)
+    {
+        $this->lotterySessionRepo->pushCriteria([
+            new HasStatusCriteria(LotterySessionStatus::SELLING),
+            OrderRandomCriteria::class,
+        ]);
+
+        return $this->lotterySessionRepo->all();
     }
 }
