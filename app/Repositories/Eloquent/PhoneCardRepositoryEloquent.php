@@ -5,15 +5,15 @@ namespace App\Repositories\Eloquent;
 use App\Repositories\Common\RepositoryEloquent;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\Contract\WalletRepository;
-use App\Models\Wallet;
+use App\Repositories\Contract\PhoneCardRepository;
+use App\Models\PhoneCard;
 
 /**
- * Class WalletRepositoryEloquent.
+ * Class PhoneCardRepositoryEloquent.
  *
  * @package namespace App\Repositories\Eloquent;
  */
-class WalletRepositoryEloquent extends RepositoryEloquent implements WalletRepository
+class PhoneCardRepositoryEloquent extends RepositoryEloquent implements PhoneCardRepository
 {
     /**
      * Specify Model class name
@@ -22,7 +22,7 @@ class WalletRepositoryEloquent extends RepositoryEloquent implements WalletRepos
      */
     public function model()
     {
-        return Wallet::class;
+        return PhoneCard::class;
     }
 
 
@@ -35,10 +35,19 @@ class WalletRepositoryEloquent extends RepositoryEloquent implements WalletRepos
 //        $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function findByUser($user_id)
+    public function existCard($code, $seri): bool
     {
         return $this->model->newQuery()
-            ->where('user_id')
+            ->where(compact('code'))
+            ->where(compact('seri'))
+            ->exists();
+    }
+
+    public function findByCodeAndSeri($code, $seri)
+    {
+        return $this->model->newQuery()
+            ->where(compact('code'))
+            ->where(compact('seri'))
             ->firstOrFail();
     }
 }

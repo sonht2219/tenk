@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Queue\Events\DepositCashPhoneCardCallbacked;
 use App\Queue\Events\LotterySessionEnded;
 use App\Queue\Events\LotterySessionSaved;
 use App\Queue\Events\LotterySessionStartCountDown;
 use App\Queue\Events\ProductSaved;
+use App\Queue\Listeners\PushNotifyResultDepositCashPhoneCard;
 use App\Queue\Listeners\PushNotifyWhenSessionEnded;
 use App\Queue\Listeners\PushNotifyWhenSessionStartCountDown;
 use App\Queue\Listeners\StartSessionForProduct;
@@ -37,6 +39,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         LotterySessionEnded::class => [
             PushNotifyWhenSessionEnded::class
+        ],
+        DepositCashPhoneCardCallbacked::class => [
+            PushNotifyResultDepositCashPhoneCard::class
         ]
     ];
 

@@ -55,7 +55,7 @@ trait CanUseWallet
     {
         $wallet = new Wallet();
         $wallet->user()->associate($user);
-        $wallet->cash = 1000000000;
+        $wallet->cash = 0;
         return $this->walletRepo->save($wallet);
     }
 

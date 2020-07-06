@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Transaction whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Transaction whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Transaction whereValue($value)
+ * @property-read \App\Models\PhoneCard|null $phone_card
  */
 class Transaction extends Model
 {
@@ -44,5 +45,9 @@ class Transaction extends Model
     }
     public function cash_detail() {
         return $this->hasOne(TransactionCashDetail::class);
+    }
+
+    public function phone_card() {
+        return $this->hasOne(PhoneCard::class);
     }
 }

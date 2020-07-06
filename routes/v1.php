@@ -57,7 +57,11 @@ Route::group(['prefix' => 'transactions', 'middleware' => 'auth:jwt'], function 
     Route::post('deposit-cash', 'Api\TransactionController@depositCash')->middleware('transaction');
 });
 
-
 Route::group(['prefix' => 'banners'], function () {
     Route::get('', 'Share\BannerController@list');
+});
+
+Route::group(['prefix' => 'phone-card'], function () {
+    Route::get('telcos', 'Api\PhoneCardPaymentController@telcos');
+    Route::get('values-card', 'Api\PhoneCardPaymentController@valuesCard');
 });

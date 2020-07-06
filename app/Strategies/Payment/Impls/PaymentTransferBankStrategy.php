@@ -6,13 +6,14 @@ namespace App\Strategies\Payment\Impls;
 use App\Enum\DepositChannel;
 use App\Enum\Status\TransactionStatus;
 use App\Models\Transaction;
+use App\Service\Traits\CanUseWallet;
 use App\Service\Traits\TransactionTrait;
 use App\Strategies\Payment\Base\PaymentStrategy;
 use App\User;
 
 class PaymentTransferBankStrategy implements PaymentStrategy
 {
-    use TransactionTrait;
+    use CanUseWallet, TransactionTrait;
     /**
      * @inheritDoc
      */

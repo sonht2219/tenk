@@ -148,7 +148,6 @@ if (!function_exists('curl_get')) {
     function curl_get($url) {
         // Khởi tạo CURL
         $ch = curl_init($url);
-
         // Thiết lập có return
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         // Thiết lập sử dụng trình duyệt hiện tại
@@ -163,6 +162,7 @@ if (!function_exists('curl_get')) {
             return null;
 
         try {
+            dd($result);
             return json_decode($result);
         } catch (Exception $e) {
             return $result;
@@ -193,13 +193,8 @@ if (!function_exists('curl_post')) {
 
         $result = curl_exec($ch);
         $error = curl_error($ch);
-
         curl_close($ch);
         if ($error) return null;
-        try {
-            return json_decode($result);
-        } catch (Exception $e) {
-            return $result;
-        }
+        return $result;
     }
 }
