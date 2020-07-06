@@ -12,5 +12,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface WalletRepository extends Repository
 {
-    //
+    public function findByUser($user_id);
 }

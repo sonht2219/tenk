@@ -29,3 +29,4 @@ Route::group(['prefix' => 'web-views'], function () {
     Route::get('articles/{slug}', 'Share\WebViewController@article')->name('article_webview');
 });
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/callback', 'Api\PhoneCardPaymentController@callbackCard')->middleware('transaction');

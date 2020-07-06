@@ -23,7 +23,7 @@
     import { mapState } from 'vuex';
     import {DEPOSIT_CASH} from "./shared";
     import { mapActions } from 'vuex';
-    import {MIXINS} from "../shared";
+    import {eventBus, EVENTS, MIXINS, PAYMENT_METHODS} from "../shared";
 
     export default {
         name: "Deposit",
@@ -47,26 +47,29 @@
                 this.currentStep--;
             },
             confirmDeposit() {
-                if (this.amount <= 0) {
-                    alert('Nhập số tiền');
-                    return;
-                }
-                const data = {
+                eventBus.$emit(EVENTS.validate_form);
+                if (!this.readyForm) return;
+
+                let data = {
                     payment_method: this.methodSelected.id,
                     value_original: this.amount,
                     success: 1
                 };
+                if (data.payment_method === PAYMENT_METHODS.THE_CAO) {
+                    data = { ...data, ...this.phoneCard }
+                }
                 this.showLoading();
                 this.depositCash(data)
                     .then(resp => {
-                        this.$router.push({ name: this.methodSelected.component_result })
+                        const message = data.payment_method === PAYMENT_METHODS.THE_CAO ? this.getProp(resp, 'data.data') : '';
+                        this.$router.push({ name: this.methodSelected.component_result, query: { message } });
                     })
                     .catch(error => alert(error.response.data.message))
                     .finally(() => this.hideLoading());
             }
         },
         computed: {
-            ...mapState('depositStore', ['methodSelected', 'amount'])
+            ...mapState('depositStore', ['methodSelected', 'amount', 'phoneCard', 'readyForm'])
         }
     }
 </script>

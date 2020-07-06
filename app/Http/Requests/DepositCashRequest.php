@@ -14,6 +14,10 @@ use Illuminate\Validation\Rule;
  *
  * @property-read $payment_method
  * @property-read $value_original
+ * @property-read $seri
+ * @property-read $code
+ * @property-read $telco
+ * @property-read $value
  * @property-read $success
  */
 class DepositCashRequest extends ValidatedRequest
@@ -24,10 +28,17 @@ class DepositCashRequest extends ValidatedRequest
      */
     public function rules()
     {
+        $telcos = collect(config('payment.phone_card.telco'))->pluck('value');
+        $valuesCard = collect(config('payment.phone_card.values_card'))->pluck('value');
         return [
             'payment_method' => ['required', 'numeric', Rule::in(DepositChannel::getValues())],
             'value_original' => ['required', 'numeric', 'min:10000'],
-            'success' => ['nullable', 'numeric']
+            'seri' => ['required_if:payment_method,'. DepositChannel::PHONE_CARD, 'string'],
+            'code' => ['required_if:payment_method,'. DepositChannel::PHONE_CARD, 'string'],
+            'telco' => ['required_if:payment_method,'. DepositChannel::PHONE_CARD, 'numeric', Rule::in($telcos)],
+            'value' => ['required_if:payment_method,'. DepositChannel::PHONE_CARD, 'numeric', Rule::in($valuesCard)],
+
+            'success' => ['nullable', 'numeric'],
         ];
     }
 }

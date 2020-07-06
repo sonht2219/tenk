@@ -14,7 +14,7 @@ use App\User;
 
 class PaymentMoMoStrategy implements PaymentStrategy
 {
-    use TransactionTrait;
+    use CanUseWallet, TransactionTrait;
     /**
      * @inheritDoc
      */

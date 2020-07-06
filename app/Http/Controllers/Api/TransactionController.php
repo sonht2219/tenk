@@ -7,8 +7,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\AuthorizedController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DepositCashRequest;
+use App\Models\Transaction;
 use App\Service\Contract\DtoBuilderService;
 use App\Service\Contract\TransactionService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -23,8 +26,10 @@ class TransactionController extends Controller
     }
 
     public function depositCash(DepositCashRequest $req) {
-        $transaction = $this->transactionService->depositCash($req, $this->user());
-        return $this->dtoBuilder->buildTransactionDto($transaction);
+        $result = $this->transactionService->depositCash($req, $this->user());
+        if ($result instanceof Transaction)
+            return $this->dtoBuilder->buildTransactionDto($result);
+        return ['data' => $result];
     }
 
     public function bankAccount() {
