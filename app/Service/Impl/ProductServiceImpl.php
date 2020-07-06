@@ -99,4 +99,11 @@ class ProductServiceImpl implements ProductService
 
         return $this->productRepo->count();
     }
+
+    public function triggerUseBot($id): Product
+    {
+        $product = $this->singleProduct($id);
+        $product->use_bot = !$product->use_bot;
+        return $this->productRepo->save($product);
+    }
 }

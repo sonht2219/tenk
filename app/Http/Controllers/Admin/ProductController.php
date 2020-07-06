@@ -61,4 +61,11 @@ class ProductController extends Controller
             $this->productService->delete($id)
         );
     }
+
+    public function changeUseBot($id)
+    {
+        return $this->dtoBuilderService->buildProductDto(
+            $this->productService->triggerUseBot($id)
+        );
+    }
 }

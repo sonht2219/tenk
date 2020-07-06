@@ -7,6 +7,7 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('{id}', 'Admin\ProductController@single');
         Route::put('{id}', 'Admin\ProductController@edit');
         Route::delete('{id}', 'Admin\ProductController@delete');
+        Route::patch('{id}/bot', 'Admin\ProductController@changeUseBot');
     });
 
     Route::post('storage', 'Admin\StorageController@saveImage');

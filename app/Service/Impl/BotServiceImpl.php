@@ -11,6 +11,8 @@ use App\Models\Bot;
 use App\Repositories\Contract\BotRepository;
 use App\Repositories\Criteria\Bot\BotSearchCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
+use App\Repositories\Criteria\Common\LimitRecordCriteria;
+use App\Repositories\Criteria\Common\OrderRandomCriteria;
 use App\Repositories\Criteria\Common\WithRelationsCriteria;
 use App\Service\Contract\BotService;
 
@@ -63,5 +65,16 @@ class BotServiceImpl implements BotService
         $bot->status = CommonStatus::INACTIVE;
 
         return $this->botRepo->save($bot);
+    }
+
+    public function findRandomBots($limit)
+    {
+        $this->botRepo->pushCriteria([
+            new WithRelationsCriteria('user'),
+            OrderRandomCriteria::class,
+            new LimitRecordCriteria($limit),
+        ]);
+
+        return $this->botRepo->all();
     }
 }

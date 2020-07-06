@@ -25,4 +25,6 @@ interface LotterySessionService
     public function statisticSessionByDay($from, $to);
     public function statisticTopProduct($from, $to, $limit);
     public function statisticTotalRevenue($from, $to);
+
+    public function findRandomSessions($limit);
 }

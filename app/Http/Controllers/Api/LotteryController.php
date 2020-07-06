@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Http\Controllers\AuthorizedController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AllLotteryByUserAndSessionRequest;
 use App\Http\Requests\BuyLotteryRequest;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 
 class LotteryController extends Controller
 {
+    use AuthorizedController;
 
     private LotteryService $lotteryService;
     private DtoBuilderService $dtoBuilder;
@@ -36,7 +38,7 @@ class LotteryController extends Controller
     }
 
     public function buyLotteries(BuyLotteryRequest $req) {
-        return $this->lotteryService->buyLotteries($req);
+        return $this->lotteryService->buyLotteries($this->user(), $req);
     }
 
     public function detailHistoryBuyLottery(AllLotteryByUserAndSessionRequest $req) {

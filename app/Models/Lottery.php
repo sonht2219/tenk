@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $status 1: Chưa bán. 2: Đã bán. -1: Không hoạt động.
  * @property-read \App\Models\LotterySession $session
  * @property-read \App\User|null $user
+ * @property-read \App\Models\Bot|null $bot
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery query()
@@ -43,7 +44,8 @@ class Lottery extends Model
         'session_id',
         'serial',
         'status',
-        'user_id'
+        'user_id',
+        'bot_id'
     ];
 
     public function session() {
@@ -52,5 +54,10 @@ class Lottery extends Model
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function bot()
+    {
+        return $this->belongsTo(Bot::class);
     }
 }

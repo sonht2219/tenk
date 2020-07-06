@@ -45,4 +45,6 @@ interface BotService
      * @throws ModelNotFoundException
      */
     public function delete($id);
+
+    public function findRandomBots($limit);
 }
