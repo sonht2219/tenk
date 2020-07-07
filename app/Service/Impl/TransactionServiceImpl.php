@@ -113,7 +113,7 @@ class TransactionServiceImpl implements TransactionService
         if (!$result)
             throw new ExecuteException(__('Email lỗi hoặc thẻ cào không tồn tại'));
 
-        if (!isset($result['status']) || !isset($result['trueval']) || !isset($result['fakeval']))
+        if (!array_key_exists('status', $result) || !array_key_exists('trueval', $result) || !array_key_exists('fakeval', $result))
             throw new ExecuteException(__('Không kiểm tra được thẻ'));
 
         $phone_card->status = $result['status'];
