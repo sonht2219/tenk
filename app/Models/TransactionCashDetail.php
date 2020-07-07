@@ -25,6 +25,8 @@ class TransactionCashDetail extends Model
 {
     protected $fillable = ['transaction_id', 'value_original', 'deposit_channel'];
     public $timestamps = false;
+    public $incrementing = false;
+    protected $primaryKey = 'transaction_id';
 
     public function transaction() {
         return $this->belongsTo(Transaction::class);

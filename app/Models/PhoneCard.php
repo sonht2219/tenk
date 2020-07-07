@@ -11,6 +11,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class PhoneCard.
  *
  * @package namespace App\Models;
+ * @property int $id
  * @property string $code
  * @property string $seri
  * @property int $telco

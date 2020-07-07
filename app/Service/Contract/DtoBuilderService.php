@@ -11,6 +11,7 @@ use App\Models\Feedback;
 use App\Models\Lottery;
 use App\Models\LotteryReward;
 use App\Models\LotterySession;
+use App\Models\PhoneCard;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\UserAddress;
@@ -34,4 +35,5 @@ interface DtoBuilderService
     public function buildStatisticTopUser($top_user);
     public function buildStatisticSessionByDay($session_statistic);
     public function buildStatisticTopProduct($top_product, $total);
+    public function buildPhoneCardDto(PhoneCard $phone_card);
 }

@@ -35,6 +35,14 @@ class PhoneCardRepositoryEloquent extends RepositoryEloquent implements PhoneCar
 //        $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    public function findByIdAndWithRelations($id, $relations = [])
+    {
+        return $this->model->newQuery()
+            ->where(compact('id'))
+            ->with($relations)
+            ->firstOrFail();
+    }
+
     public function existCard($code, $seri): bool
     {
         return $this->model->newQuery()
@@ -48,6 +56,14 @@ class PhoneCardRepositoryEloquent extends RepositoryEloquent implements PhoneCar
         return $this->model->newQuery()
             ->where(compact('code'))
             ->where(compact('seri'))
+            ->firstOrFail();
+    }
+
+    public function findByTransaction($transaction_id, $relations = [])
+    {
+        return $this->model->newQuery()
+            ->where(compact('transaction_id'))
+            ->with($relations)
             ->firstOrFail();
     }
 }
