@@ -16,6 +16,7 @@ use App\Repositories\Contract\TransactionRepository;
 use App\Repositories\Criteria\Common\HasFromCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Common\HasToCriteria;
+use App\Repositories\Criteria\Common\OrderByCreatedAtDescCriteria;
 use App\Repositories\Criteria\Common\WithRelationsCriteria;
 use App\Repositories\Criteria\Transaction\TransactionSearchCriteria;
 use App\Service\Contract\TransactionService;
@@ -70,6 +71,7 @@ class TransactionServiceImpl implements TransactionService
         if ($search)
             $this->transactionRepo->pushCriteria(new TransactionSearchCriteria($search));
 
+        $this->transactionRepo->pushCriteria(OrderByCreatedAtDescCriteria::class);
         $this->transactionRepo->pushCriteria(new WithRelationsCriteria(['cash_detail', 'user']));
         return $this->transactionRepo->paginate($limit);
     }
