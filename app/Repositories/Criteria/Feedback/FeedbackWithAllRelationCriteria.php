@@ -18,7 +18,7 @@ class FeedbackWithAllRelationCriteria extends WithRelationsCriteria
     public function __construct()
     {
         parent::__construct([
-            'lottery', 'product', 'session', 'user'
+            'lottery', 'product', 'session', 'user', 'session.reward'
         ]);
     }
 }
