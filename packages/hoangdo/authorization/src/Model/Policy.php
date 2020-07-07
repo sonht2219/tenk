@@ -37,6 +37,6 @@ class Policy extends Model
 
     public function users()
     {
-        return $this->belongsToMany(config('authorization.user'), 'user_policy');
+        return $this->belongsToMany(config('authorization.user'), 'policy_user');
     }
 }

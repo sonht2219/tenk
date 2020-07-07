@@ -118,6 +118,6 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function policies()
     {
-        return $this->belongsToMany(Policy::class, 'user_policy');
+        return $this->belongsToMany(Policy::class, 'policy_user');
     }
 }
