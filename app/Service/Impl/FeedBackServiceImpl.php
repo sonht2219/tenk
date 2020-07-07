@@ -19,6 +19,7 @@ use App\Repositories\Criteria\Feedback\FeedbackWithAllRelationCriteria;
 use App\Service\Contract\FeedbackService;
 use App\Service\Contract\FileService;
 use App\User;
+use HoangDo\Common\Criteria\OrderByCreatedAtDescCriteria;
 
 class FeedBackServiceImpl implements FeedbackService
 {
@@ -78,7 +79,10 @@ class FeedBackServiceImpl implements FeedbackService
             $this->feedbackRepos->pushCriteria(new BelongToUserCriteria($user->id));
         }
 
-        $this->feedbackRepos->pushCriteria(FeedbackWithAllRelationCriteria::class);
+        $this->feedbackRepos->pushCriteria([
+            FeedbackWithAllRelationCriteria::class,
+            new OrderByCreatedAtDescCriteria(),
+        ]);
 
         return $this->feedbackRepos->paginate($limit);
     }
