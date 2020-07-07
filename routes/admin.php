@@ -67,4 +67,10 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::put('{id}', 'Admin\BotController@edit');
         Route::delete('{id}', 'Admin\BotController@delete');
     });
+
+    Route::group(['prefix' => 'transactions'], function () {
+        Route::get('', 'Admin\TransactionController@list');
+        Route::get('check-phone-card', 'Admin\TransactionController@checkPhoneCard')->middleware('transaction');
+        Route::put('{id}', 'Admin\TransactionController@edit')->middleware('transaction');
+    });
 });

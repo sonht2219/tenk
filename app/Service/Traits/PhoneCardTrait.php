@@ -43,9 +43,10 @@ trait PhoneCardTrait
     }
 
     protected function checkCard($seri, $code, $telco, $note = '') {
-        $data = compact('seri', 'code', 'telco', 'email', 'note') + ['email' => $this->_email];
+        $isjson = true;
+        $data = compact('seri', 'code', 'telco', 'note', 'isjson') + ['email' => $this->_email];
         $url = $this->_api_url . '?' .http_build_query($data);
-        return $this->_http_client->get($url)->getBody()->getContents();
+        return json_decode($this->_http_client->get($url)->getBody(), true);
     }
 
     protected function callbackCard($seri, $code, $telco, $note, $email, $password, $card_value, $true_value, $status) {

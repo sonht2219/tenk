@@ -12,6 +12,8 @@ use App\Repositories\Common\Repository;
  */
 interface PhoneCardRepository extends Repository
 {
+    public function findByIdAndWithRelations($id, $relations = []);
     public function existCard($code, $seri): bool;
     public function findByCodeAndSeri($code, $seri);
+    public function findByTransaction($transaction_id, $relations = []);
 }

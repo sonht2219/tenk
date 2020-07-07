@@ -9,6 +9,7 @@ use App\Enum\Status\LotterySessionStatus;
 use App\Enum\Status\LotteryStatus;
 use App\Enum\Status\RewardStatus;
 use App\Enum\Status\TransactionStatus;
+use App\Enum\Telco;
 use App\Enum\Type\UserAddressType;
 use App\Helper\Constant;
 use App\Models\Article;
@@ -19,6 +20,7 @@ use App\Models\Lottery;
 use App\Models\LotteryReward;
 use App\Models\LotteryRewardInfo;
 use App\Models\LotterySession;
+use App\Models\PhoneCard;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\UserAddress;
@@ -273,12 +275,15 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'status' => $transaction->status,
             'status_title' => TransactionStatus::getDescription($transaction->status),
             'transaction_cash_detail' => null,
+            'user' => null,
             'created_at' => $transaction->created_at->format(Constant::GLOBAL_TIME_FORMAT),
             'updated_at' => $transaction->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
         ];
 
         if ($transaction->relationLoaded('cash_detail') && $transaction->cash_detail)
             $result['transaction_cash_detail'] = $transaction->cash_detail;
+        if ($transaction->relationLoaded('user') && $transaction->user)
+            $result['user'] = $this->buildUserDto($transaction->user);
 
         return $result;
     }
@@ -373,5 +378,29 @@ class DtoBuilderServiceImpl implements DtoBuilderService
             'value' => $top_product->total_revenue,
             'percent' => round($top_product->total_revenue * 100 / $total)
         ];
+    }
+
+    public function buildPhoneCardDto(PhoneCard $phone_card)
+    {
+        $result = [
+            'id' => $phone_card->id,
+            'seri' => $phone_card->seri,
+            'code' => $phone_card->code,
+            'telco' => $phone_card->telco,
+            'telco_title' => Telco::getKey($phone_card->telco),
+            'value' => $phone_card->value,
+            'true_value' => $phone_card->true_value,
+            'card_value' => $phone_card->card_value,
+            'status' => $phone_card->status,
+            'transaction_id' => $phone_card->transaction_id,
+            'transaction' => null,
+            'created_at' => $phone_card->created_at->format(Constant::GLOBAL_TIME_FORMAT),
+            'updated_at' => $phone_card->updated_at->format(Constant::GLOBAL_TIME_FORMAT)
+        ];
+
+        if ($phone_card->relationLoaded('transaction') && $phone_card->transaction)
+            $result['transaction'] = $this->buildTransactionDto($phone_card->transaction);
+
+        return $result;
     }
 }
