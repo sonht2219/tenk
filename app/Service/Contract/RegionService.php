@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Contract;
+namespace App\Service\Contract;
 
 
 interface RegionService

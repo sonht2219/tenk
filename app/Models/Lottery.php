@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property \Illuminate\Support\Carbon|null $joined_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery whereJoinedAt($value)
+ * @property int $bot_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Lottery whereBotId($value)
  */
 class Lottery extends Model
 {

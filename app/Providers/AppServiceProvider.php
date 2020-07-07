@@ -32,8 +32,8 @@ use App\Service\Impl\ProductServiceImpl;
 use App\Service\Impl\TransactionServiceImpl;
 use App\Service\Impl\UserAddressServiceImpl;
 use App\Service\Impl\UserServiceImpl;
-use App\Services\Contract\RegionService;
-use App\Services\Impl\RegionServiceImpl;
+use App\Service\Contract\RegionService;
+use App\Service\Impl\RegionServiceImpl;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

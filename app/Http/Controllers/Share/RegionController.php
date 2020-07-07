@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Share;
 
 
 use App\Http\Controllers\Controller;
-use App\Services\Contract\RegionService;
+use App\Service\Contract\RegionService;
 
 class RegionController extends Controller
 {

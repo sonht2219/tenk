@@ -4,7 +4,9 @@ namespace App;
 
 use App\Models\Wallet;
 use App\Notifications\CustomVerifyEmailQueued;
+use HoangDo\Authorization\Model\Policy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -30,6 +32,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $status 1: Hoạt động. -1: Không hoạt động.
+ * @property-read Policy[]|Collection $policies
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
@@ -92,7 +95,16 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        $result = [
+            'is_admin' => false,
+            'roles' => []
+        ];
+        foreach ($this->policies as $policy) {
+            if ($policy->is_admin) $result['is_admin'] = true;
+            foreach ($policy->roles as $role)
+                $result['roles'][] = $role->id;
+        }
+        return $result;
     }
 
     public function sendEmailVerificationNotification()
@@ -102,5 +114,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function wallet() {
         return $this->hasOne(Wallet::class);
+    }
+
+    public function policies()
+    {
+        return $this->belongsToMany(Policy::class, 'user_policy');
     }
 }

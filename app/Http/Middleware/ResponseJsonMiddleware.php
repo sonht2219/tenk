@@ -20,7 +20,7 @@ class ResponseJsonMiddleware
         if (!in_array($controllerResponse->status(), [200, 201]))
             return $controllerResponse;
         if ($controllerResponse instanceof JsonResponse) {
-            if (is_array($data) || $data instanceof Collection || $data instanceof Model) {
+            if (is_array($data) || $data instanceof Collection || $data instanceof Model || is_object($data)) {
                 $is_multi = false;
                 $meta = null;
                 if (is_sequential_array($data) || $data instanceof Collection) {

@@ -6,7 +6,7 @@
  * Time: 6:22 PM
  */
 
-namespace App\Http\Requests\Contracts;
+namespace App\Http\Requests\Contract;
 
 
 trait AuthorizedRequest
