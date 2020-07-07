@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Services\Impl;
+namespace App\Service\Impl;
 
 
 use App\Repositories\Contract\DistrictRepository;
 use App\Repositories\Contract\ProvinceRepository;
-use App\Services\Contract\RegionService;
+use App\Service\Contract\RegionService;
 
 class RegionServiceImpl implements RegionService
 {

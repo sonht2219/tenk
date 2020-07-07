@@ -17,6 +17,7 @@ use App\Repositories\Contract\WalletRepository;
 use App\Repositories\Criteria\Common\BelongToUserCriteria;
 use App\Repositories\Criteria\Common\HasStatusCriteria;
 use App\Repositories\Criteria\Common\WithRelationsCriteria;
+use App\Repositories\Criteria\User\UserHasPolicyCriteria;
 use App\Repositories\Criteria\User\UserSearchCriteria;
 use App\Service\Contract\FileService;
 use App\Service\Contract\UserService;
@@ -102,11 +103,14 @@ class UserServiceImpl implements UserService
         $search = $req->get('search');
         $status = $req->get('status');
         $limit = $req->get('limit') ?: 10;
+        $policy_id = $req->get('policy_id');
 
         if ($search)
             $this->userRepo->pushCriteria(new UserSearchCriteria($search));
         if ($status)
             $this->userRepo->pushCriteria(new HasStatusCriteria($status));
+        if ($policy_id)
+            $this->userRepo->pushCriteria(new UserHasPolicyCriteria($policy_id));
 
         return $this->userRepo->paginate($limit);
     }

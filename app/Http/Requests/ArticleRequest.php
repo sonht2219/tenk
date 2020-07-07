@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enum\Status\CommonStatus;
 use App\Http\Requests\Contract\ValidatedRequest;
-use App\Http\Requests\Contracts\AuthorizedRequest;
+use App\Http\Requests\Contract\AuthorizedRequest;
 use Illuminate\Validation\Rule;
 
 /**

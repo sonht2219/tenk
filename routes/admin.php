@@ -1,23 +1,32 @@
 <?php
 
+use App\Enum\Type\Role;
+
 Route::group(['middleware' => 'auth:jwt'], function() {
     Route::group(['prefix' => 'products'], function () {
-        Route::post('', 'Admin\ProductController@create')->middleware('transaction');
         Route::get('', 'Admin\ProductController@list');
-        Route::get('{id}', 'Admin\ProductController@single');
-        Route::put('{id}', 'Admin\ProductController@edit');
-        Route::delete('{id}', 'Admin\ProductController@delete');
-        Route::patch('{id}/bot', 'Admin\ProductController@changeUseBot');
+        Route::group(['middleware' => 'has_any_roles:' . Role::CAN_MANAGE_PRODUCTS], function () {
+            Route::post('', 'Admin\ProductController@create')->middleware('transaction');
+            Route::get('{id}', 'Admin\ProductController@single');
+            Route::put('{id}', 'Admin\ProductController@edit');
+            Route::delete('{id}', 'Admin\ProductController@delete');
+            Route::patch('{id}/bot', 'Admin\ProductController@changeUseBot');
+        });
     });
 
     Route::post('storage', 'Admin\StorageController@saveImage');
 
-    Route::group(['prefix' => 'rewards'], function () {
+    Route::group([
+        'prefix' => 'rewards',
+        'middleware' => 'has_any_roles:' . Role::CAN_MANAGE_REWARDS
+    ], function () {
         Route::get('', 'Admin\LotteryRewardController@list');
         Route::patch('{id}', 'Admin\LotteryRewardController@updateStatus');
     });
 
-    Route::group(['prefix' => 'statistics'], function () {
+    Route::group([
+        'prefix' => 'statistics'
+    ], function () {
         Route::get('users-count', 'Admin\DashboardController@usersCount');
         Route::get('products-count', 'Admin\DashboardController@productsCount');
         Route::get('lotteries-count', 'Admin\DashboardController@lotteriesCount');
@@ -28,15 +37,21 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::get('top-product', 'Admin\DashboardController@statisticTopProduct');
     });
 
-    Route::group(['prefix' => 'articles'], function () {
+    Route::get('articles', 'Admin\ArticleController@list');
+    Route::group([
+        'prefix' => 'articles',
+        'middleware' => 'has_any_roles:' . Role::CAN_MANAGE_ARTICLES
+    ], function () {
         Route::post('', 'Admin\ArticleController@create');
-        Route::get('', 'Admin\ArticleController@list');
         Route::get('{id}', 'Admin\ArticleController@single');
         Route::put('{id}', 'Admin\ArticleController@edit');
         Route::delete('{id}', 'Admin\ArticleController@delete');
     });
 
-    Route::group(['prefix' => 'banner-types'], function () {
+    Route::group([
+        'prefix' => 'banner-types',
+        'middleware' => 'has_any_roles:' . Role::CAN_MANAGE_BANNERS
+    ], function () {
         Route::post('', 'Admin\BannerTypeController@create');
         Route::get('', 'Admin\BannerTypeController@list');
         Route::get('{id}', 'Admin\BannerTypeController@single');
@@ -44,7 +59,10 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::delete('{id}', 'Admin\BannerTypeController@delete');
     });
 
-    Route::group(['prefix' => 'banners'], function () {
+    Route::group([
+        'prefix' => 'banners',
+        'middleware' => 'has_any_roles:' . Role::CAN_MANAGE_BANNERS
+    ], function () {
         Route::post('', 'Admin\BannerController@create');
         Route::get('', 'Share\BannerController@list');
         Route::get('{id}', 'Admin\BannerController@single');
@@ -52,15 +70,21 @@ Route::group(['middleware' => 'auth:jwt'], function() {
         Route::delete('{id}', 'Admin\BannerController@delete');
     });
 
-    Route::group(['prefix' => 'users'], function () {
+    Route::get('users', 'Admin\UserController@list');
+    Route::group([
+        'prefix' => 'users',
+        'middleware' => 'has_any_roles:' . Role::CAN_MANAGE_USERS
+    ], function () {
         Route::post('', 'Admin\UserController@create');
-        Route::get('', 'Admin\UserController@list');
         Route::get('{id}', 'Admin\UserController@single');
         Route::put('{id}', 'Admin\UserController@edit');
         Route::delete('{id}', 'Admin\UserController@delete');
     });
 
-    Route::group(['prefix' => 'bots'], function () {
+    Route::group([
+        'prefix' => 'bots',
+        'middleware' => 'has_any_roles:' . Role::CAN_MANAGE_BOTS
+    ], function () {
         Route::post('','Admin\BotController@create');
         Route::get('', 'Admin\BotController@list');
         Route::get('{id}', 'Admin\BotController@single');
