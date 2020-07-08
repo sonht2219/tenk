@@ -15,6 +15,7 @@ input[type=number] {
 }
 .content {
     padding: 0;
+    min-height: 530px;
 }
 .title {
     font-size: 16px;
@@ -72,7 +73,7 @@ input[type=number] {
     left: 50px;
 }
 .btn-deposit {
-    position: absolute;
+    position: fixed;
     width: 100%;
     bottom: 10px;
     text-align: center;
